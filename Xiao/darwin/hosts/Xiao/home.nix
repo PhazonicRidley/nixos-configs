@@ -28,14 +28,27 @@
         }
       ];
       shellAliases = {
-        clang-17 = "/opt/homebrew/Cellar/llvm@17/17.0.6/bin/clang";
-        "clang++-17" = "/opt/homebrew/Cellar/llvm@17/17.0.6/bin/clang++";
+        clang-20 = "/opt/homebrew/Cellar/llvm@20/20.1.7/bin/clang";
+        "clang++-17" = "/opt/homebrew/Cellar/llvm@20/20.1.7/bin/clang++";
+        clangd-brew = "/opt/homebrew/Cellar/llvm@20/20.1.7/bin/clangd";
+      };
+    };
+    
+    nushell = {
+      enable = true;
+      plugins = [pkgs.nushellPlugins.net];
+
+      shellAliases = {
+        clang-20 = "/opt/homebrew/Cellar/llvm/20.1.7/bin/clang";
+        "clang++-20" = "/opt/homebrew/Cellar/llvm/20.1.7/bin/clang++";
+        brew-clangd = "/opt/homebrew/Cellar/llvm/20.1.7/bin/clangd";
       };
     };
 
     starship = {
       enable = true;
-      enableZshIntegration = true;
+      enableZshIntegration = false;
+      enableNushellIntegration = true;
     };
 
     vscode = {
@@ -64,12 +77,25 @@
   };
 
   home.packages = [
-    pkgs.signal-desktop-bin
-    pkgs.python313
+    (pkgs.python313.withPackages (ps: with ps; [
+	pyserial
+	cmake
+	pip
+    ]))
     pkgs.conan
-    pkgs.cmake
+    pkgs.python313Packages.pyocd
+    # pkgs.python313Packages.pyserial
+    pkgs.stm32loader
+    #pkgs.cmake
     pkgs.gcc
     pkgs.nerd-fonts.jetbrains-mono
+    pkgs.nushellPlugins.net
+    pkgs.act
+
+    pkgs.vim
+    pkgs.neovim
+    pkgs.fastfetch
+    pkgs.bat
   ];
 
   fonts.fontconfig.enable = true;

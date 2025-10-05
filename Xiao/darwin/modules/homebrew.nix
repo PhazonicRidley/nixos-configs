@@ -7,7 +7,7 @@ inputs@{lib, nix-homebrew, homebrew-core, homebrew-cask, ...}:
     enable = true;
 
     # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-    enableRosetta = lib.mkDefault true;
+    enableRosetta = false; #lib.mkDefault true;
 
     # User owning the Homebrew prefix
     user = "phazonic";
@@ -23,7 +23,7 @@ inputs@{lib, nix-homebrew, homebrew-core, homebrew-cask, ...}:
     # Optional: Enable fully-declarative tap management
     #
     # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
-    mutableTaps = false;
+    mutableTaps = true;
   };
 }
 

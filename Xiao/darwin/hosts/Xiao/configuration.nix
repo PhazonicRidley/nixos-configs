@@ -5,6 +5,11 @@ inputs@{ self, pkgs, config, lib, ...}: {
   nix.settings.experimental-features = "nix-command flakes";
   networking.hostName = "Xiao";
   system.primaryUser = "phazonic";
+  environment.variables = {
+	EDITOR = "vim";
+	BROWSER = "firefox";
+	NIXPKGS_ALLOW_UNFREE = "1";
+  };
 
   environment.systemPackages =
   [ pkgs.vim
@@ -12,7 +17,7 @@ inputs@{ self, pkgs, config, lib, ...}: {
     pkgs.fastfetch
     pkgs.bat
     pkgs.starship
-    pkgs.iterm2
+
   ];
 
   fonts.packages = with pkgs; [
@@ -24,6 +29,9 @@ inputs@{ self, pkgs, config, lib, ...}: {
     enable = true;
     promptInit = ''
       eval "$(starship init zsh)"
+    '';
+    shellInit = ''
+	export PATH='/Users/phazonic/.local/bin':$PATH
     '';
   };
 
@@ -83,10 +91,24 @@ inputs@{ self, pkgs, config, lib, ...}: {
 
     brews = [
       "rustup" # this is a temp thing until i find a rust conf i like
-      "llvm@17"
+      "usbutils"
+      "arm-none-eabi-gdb"
+      "llvm@20"
+      "clang-format"
+      "iproute2mac"
+      "colima"
+      "docker"
+      "docker-compose"
+      "qemu"
+      "lima-additional-guestagents" 
     ];
 
-    casks = [
+   casks = [
+      "scroll-reverser"
+      "saleae-logic"
+      "signal"
+      "obsidian"
+      "utm"
       "google-chrome"
       "raycast"
       "telegram-desktop"
