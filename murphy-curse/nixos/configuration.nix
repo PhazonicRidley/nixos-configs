@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{inputs,  config, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   nix.extraOptions = let
@@ -18,22 +18,24 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.home-manager
     ];
-
-  # Home Manager invocation
+  
   home-manager = {
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = { inherit inputs nix; };
     users = {
       phazonic = import ../home-manager/home.nix;
     };
   };
 
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "RoboServer"; # Define your hostname.
+  # Use latest kernel.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  networking.hostName = "murphy-curse"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -98,10 +100,6 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-
-  # Shell configuration
-  programs.zsh.enable = true;
-
   users.users.phazonic = {
     isNormalUser = true;
     description = "Madeline Schneider";
@@ -126,13 +124,15 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages =  [
-   pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-   pkgs.wget
-   pkgs.fastfetch
-   pkgs.tcpdump
-   
-   pkgs.home-manager
+  environment.systemPackages = with pkgs; [
+   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+   wget
+   curl
+   neovim
+   git
+   tcpdump
+
+   home-manager
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -146,15 +146,10 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh = {
-	enable = true;
-	settings = {
-		PasswordAuthentication = true;
-	};
-  };
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+   networking.firewall.allowedTCPPorts = [ 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
@@ -165,6 +160,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.05"; # Did you read the comment?
+  system.stateVersion = "25.11"; # Did you read the comment?
 
 }
