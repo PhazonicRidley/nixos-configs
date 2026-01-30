@@ -1,11 +1,19 @@
-{ input, lib, config, pkgs, nix ... }:
+{ input, lib, config, pkgs, ... }:
 
 {
   nixpkgs.config = {
 	allowUnfree = true;	
   };
 
-  inherit nix;
+  nix.extraOptions = let
+    experimentalFeatures = builtins.concatStringsSep " " [
+      "flakes"
+      "nix-command"
+    ];
+  in ''
+      experimental-features = ${experimentalFeatures}
+      warn-dirty = false
+  '';
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -37,9 +45,12 @@
       ];
     };
 
+    nushell.enable = true;
+
     starship = {
       enable = true;
       enableZshIntegration = true;
+      enableNushellIntegration = true;
     };
   };
 
@@ -48,6 +59,39 @@
 
   programs = {
     vscode.enable = true;
+    fastfetch = { 
+  	enable = true;
+        settings = { 
+        modules = [
+          "title"
+          "separator"
+          "os"
+          "host"
+          "kernel"
+          "uptime"
+          "packages"
+          "shell"
+          "de"
+          "wm"
+          "wmtheme"
+          "theme"
+          "icons"
+          "font"
+          "cursor"
+          "terminal"
+          "cpu"
+          {
+            type = "gpu";
+            format = "{1} {2} @ {3}";
+          }
+          "memory"
+          "swap"
+          "disk"
+          "localip"
+          "locale"
+        ];
+	};
+    };
     hyfetch = {
       enable = true;
       settings = {
@@ -65,14 +109,17 @@
 
     git = {
       enable = true;
-      userName = "PhazonicRidley";
-      userEmail = "ma13hew@gmail.com";
       
-      extraConfig = {
+      settings = {
+        user = {
+          name = "PhazonicRidley";
+          email = "ma13hew@gmail.com";
+        };
         init.defaultBranch = "main";
         core.editor = "vim";
         pull.rebase = false;
       };
+
       ignores = [
         ".DS_Store"
         "*.log"
@@ -82,8 +129,11 @@
         "__pycache__"
       ];
     };
+    
+    discord.enable = true;
+    
   };
-  home.packages = [
+  home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -100,7 +150,13 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
-    pkgs.vim
+    vim
+    kdePackages.kate
+    nushell
+    signal-desktop
+    telegram-desktop
+    chromium
+    neovim
    
   ];
 

@@ -21,7 +21,7 @@
 	};
   in 
   {
-	nixosConfigurations.RoboServer = nixpkgs.lib.nixosSystem {
+	nixosConfigurations."murphy-curse" = nixpkgs.lib.nixosSystem {
 		specialArgs = { inherit inputs system; };
 		modules = [
 			./nixos/configuration.nix

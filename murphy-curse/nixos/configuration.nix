@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   nix.extraOptions = let
@@ -18,10 +18,11 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      inputs.home-manager.nixosModules.home-manager
     ];
   
   home-manager = {
-    extraSpecialArgs = { inherit inputs nix; };
+    extraSpecialArgs = { inherit inputs; };
     users = {
       phazonic = import ../home-manager/home.nix;
     };
@@ -63,9 +64,32 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+
+  # NVIDIA stuff https://nixos.wiki/wiki/Nvidia
+  # TODO: Move to its own file
+  hardware.graphics = {
+	enable = true;
+  };
+
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+  services.xserver = {
+	enable = true;
+	videoDrivers = ["nvidia"];
+  };
+
+  hardware.nvidia = {
+	modesetting.enable = true;
+        powerManagement.enable = true;
+        powerManagement.finegrained = false; # Ok to use for RTX 3070
+        
+	open = true; # Use NVIDIA's open source kernel drivers
+        
+        nvidiaSettings = true;
+
+	package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+  };
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
@@ -100,16 +124,18 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.defaultUserShell = pkgs.nushell;
+
   users.users.phazonic = {
     isNormalUser = true;
     description = "Madeline Schneider";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      kdePackages.kate
-    #  thunderbird
-    ];
 
-    shell = pkgs.zsh;
+    shell = pkgs.nushell;
+
+    packages = with pkgs; [
+       nushell
+    ];
 
     openssh.authorizedKeys.keys = [
   	"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDlWOd2WgZqVrbSn+1aNJszcFLyLLDAoimjBhfjhI7IkLeztUw5Bq21lUCgX6NbSpwQpXcsu5BGVLdpUn5rctsheBG7sNnf8PUAsKC3eEosBq1Z/If/uFVKe+KIIHDbALYWtONS51DRM2nLQ/FuKcx0MTVB7Fwwtp82otRWfWD7CjDD9Eq1O+wvhWYDdlC66KK+6j2SJNDYh4D4CHm2PlAQjoRyFiPaylmXTPZV8M8LXcnir6s8wI/DH2EuDJu8a0UOYudUHnzfi+xhysSLoS21/ZP3aLc3yHFbSUTBtwRi27c6LyagO/24Q8RV6tB2PyMnklJC3qCkphmHJ39+CBDCIcgx6WjmV6NTVLuWWJ/qsf0NUW4chcRd1LaQoFgiFroaIRfgajCZqF4boshK9x8NsPoaIFg/f0YqyxEWZj7q6MEJ2O2Nyx92WHIeBWhahTQQPGM6/2P8CwAEcbtOKKEUX4E7+1Q4+3SZXT1zjbNA0zDf+ebhsiVSgXq83oFJauE= phazonic@Madelines-Laptop.local" 
@@ -118,6 +144,9 @@
 
   # Install firefox.
   programs.firefox.enable = true;
+
+  # Fall back zsh shell, should be managed by home-manager
+  programs.zsh.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -161,5 +190,14 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.11"; # Did you read the comment?
+  
+  programs.steam = {
+  	enable = true; # Master switch, already covered in installation
+  	remotePlay.openFirewall = true;  # Open ports in the firewall for Steam Remote Play
+  	dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server hosting
+  	# Other general flags if available can be set here.
+  };
+  
+  programs.gamemode.enable = true;
 
 }
