@@ -44,10 +44,27 @@
         }
       ];
     };
+   bash = {
+	enable = true;
+   };
 
     starship = {
       enable = true;
       enableZshIntegration = true;
+      enableBashIntegration = true;
+      settings = {
+	shell = {
+		disabled = false;
+		format = "[$indicator]($style) ";
+		bash_indicator = "🐚";
+		zsh_indicator = "⚡";
+	};
+	
+	nix_shell = {
+		disabled = false;
+		heuristic = true;
+	};
+      };
     };
   };
 
@@ -73,14 +90,16 @@
 
     git = {
       enable = true;
-      userName = "PhazonicRidley";
-      userEmail = "ma13hew@gmail.com";
-      
-      extraConfig = {
+      settings = {
+        user = {
+          name = "PhazonicRidley";
+          email = "ma13hew@gmail.com";
+        };
         init.defaultBranch = "main";
         core.editor = "vim";
         pull.rebase = false;
       };
+
       ignores = [
         ".DS_Store"
         "*.log"
@@ -109,6 +128,14 @@
     #   echo "Hello, ${config.home.username}!"
     # '')
     pkgs.vim
+    pkgs.python314
+    pkgs.uv
+    
+    # Compiler nonsense
+    pkgs.llvmPackages_20.libcxxClang
+    pkgs.llvmPackages_20.clang-tools
+    pkgs.python314Packages.cmake
+    pkgs.python314Packages.ninja
    
   ];
 
