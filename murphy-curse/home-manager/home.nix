@@ -58,6 +58,18 @@
   # environment.
 
   programs = {
+    neovim = {
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+        initLua = ''
+		
+        vim.opt.clipboard = "unnamedplus"
+        
+        vim.opt.number = true
+      '';		
+    };
+
     vscode.enable = true;
     fastfetch = { 
   	enable = true;
@@ -131,8 +143,23 @@
     };
     
     discord.enable = true;
+    lutris.enable = true;
+    
+    tmux = {
+  	enable = true;
+  	mouse = true;
+  
+  	extraConfig = ''
+    	# Modern clipboard integration via OSC 52
+    	set -g set-clipboard on
+    
+    	# Vi-style keys for copy mode
+    	setw -g mode-keys vi
+  	'';
+    };
     
   };
+
   home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
@@ -150,13 +177,14 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
-    vim
     kdePackages.kate
     nushell
     signal-desktop
     telegram-desktop
     chromium
-    neovim
+    iputils
+    dnsutils
+    htop
    
   ];
 

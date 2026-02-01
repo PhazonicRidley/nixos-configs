@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ inputs, config, pkgs, ... }:
+{ inputs, lib, config, pkgs, ... }:
 
 {
   nix.extraOptions = let
@@ -36,7 +36,7 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "murphy-curse"; # Define your hostname.
+  networking.hostName = "MurphyCurse"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -64,6 +64,9 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+
+  # Bluetooth
+  hardware.bluetooth.enable = true;
 
   # NVIDIA stuff https://nixos.wiki/wiki/Nvidia
   # TODO: Move to its own file
@@ -154,12 +157,13 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+   vim
    wget
    curl
    neovim
    git
    tcpdump
+   ntfs3g
 
    home-manager
   ];
@@ -197,6 +201,19 @@
   	dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server hosting
   	# Other general flags if available can be set here.
   };
+
+  # fileSystems =
+  # let
+  #   ntfs-drives = [
+  #     "/home/phazonic/hdd-ntfs"
+  #   ];
+  # in
+  # lib.genAttrs ntfs-drives (path: {
+  #   options = [
+  #     "uid=0C800E8E800E7E88" # REPLACE "$UID" WITH YOUR ACTUAL UID!
+  #     # "nofail"
+  #   ];
+  # });
   
   programs.gamemode.enable = true;
 

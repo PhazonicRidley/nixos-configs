@@ -29,6 +29,12 @@
       fsType = "ext4";
     };
 
+  fileSystems."/home/phazonic/hdd-ntfs" =
+    { device = "/dev/disk/by-uuid/0C800E8E800E7E88";
+      fsType = "ntfs3";
+    };
+
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/dd1e4861-f3a3-4a3a-8b80-20c8b7dac625"; }
     ];
