@@ -1,6 +1,6 @@
-inputs@{lib, home-manager, ...}:
+inputs@{ lib, home-manager, ... }:
 {
-  imports = [home-manager.darwinModules.home-manager];
+  imports = [ home-manager.darwinModules.home-manager ];
 
   home-manager = {
     useGlobalPkgs = lib.mkDefault true;
@@ -8,5 +8,3 @@ inputs@{lib, home-manager, ...}:
     users.phazonic = lib.mkDefault ../hosts/Xiao/home.nix;
   };
 }
-
-        

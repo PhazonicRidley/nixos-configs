@@ -2,32 +2,39 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{inputs, config, pkgs, ... }:
+{
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 
 {
-  nix.extraOptions = let
-    experimentalFeatures = builtins.concatStringsSep " " [
-      "flakes"
-      "nix-command"
-    ];
-  in ''
+  nix.extraOptions =
+    let
+      experimentalFeatures = builtins.concatStringsSep " " [
+        "flakes"
+        "nix-command"
+      ];
+    in
+    ''
       experimental-features = ${experimentalFeatures}
       warn-dirty = false
-  '';
+    '';
 
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./nginx.nix
-      inputs.home-manager.nixosModules.home-manager
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./nginx.nix
+    inputs.home-manager.nixosModules.home-manager
+  ];
 
   # Home Manager invocation
   home-manager = {
-	extraSpecialArgs = { inherit inputs; };
-	users = {
-		phazonic = import ../home-manager/home.nix;
-	};
+    extraSpecialArgs = { inherit inputs; };
+    users = {
+      phazonic = import ../home-manager/home.nix;
+    };
   };
 
   # Bootloader.
@@ -72,8 +79,8 @@
 
   # Configure keymap in X11
   #services.xserver.xkb = {
-   # layout = "us";
-    #variant = "";
+  # layout = "us";
+  #variant = "";
   #};
 
   # Enable CUPS to print documents.
@@ -83,21 +90,20 @@
   #services.pulseaudio.enable = false;
   #security.rtkit.enable = true;
   #services.pipewire = {
-   # enable = true;
-    #alsa.enable = true;
-    #alsa.support32Bit = true;
-    #pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+  # enable = true;
+  #alsa.enable = true;
+  #alsa.support32Bit = true;
+  #pulse.enable = true;
+  # If you want to use JACK applications, uncomment this
+  #jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+  # use the example session manager (no others are packaged yet so this is enabled by default,
+  # no need to redefine it in your config for now)
+  #media-session.enable = true;
   #};
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-
 
   # Enable docker
   virtualisation.docker.enable = true;
@@ -110,15 +116,21 @@
   users.users.phazonic = {
     isNormalUser = true;
     description = "Madeline Schneider";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+    ];
     packages = with pkgs; [
       kdePackages.kate
-    #  thunderbird
+      #  thunderbird
     ];
 
     shell = pkgs.zsh;
 
-    openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgFpBjoDEVwG25M8hHf10tzJXKRfnKLC/2o3nqr9d61 phazonic@Xiao"];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgFpBjoDEVwG25M8hHf10tzJXKRfnKLC/2o3nqr9d61 phazonic@Xiao"
+    ];
   };
 
   # Allow unfree packages
@@ -126,16 +138,16 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages =  [
-   pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-   pkgs.wget
-   pkgs.fastfetch
-   pkgs.tcpdump
-   pkgs.docker-compose
-   pkgs.gcc14
-   pkgs.htop
- 
-   pkgs.home-manager
+  environment.systemPackages = [
+    pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    pkgs.wget
+    pkgs.fastfetch
+    pkgs.tcpdump
+    pkgs.docker-compose
+    pkgs.gcc14
+    pkgs.htop
+
+    pkgs.home-manager
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -150,10 +162,10 @@
 
   # Enable the OpenSSH daemon.
   services.openssh = {
-	enable = true;
-	settings = {
-		PasswordAuthentication = true;
-	};
+    enable = true;
+    settings = {
+      PasswordAuthentication = true;
+    };
   };
 
   # Open ports in the firewall.
@@ -169,7 +181,6 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
-
 
   # Disable suspension and sleep
   systemd.targets.sleep.enable = false;

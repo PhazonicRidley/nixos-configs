@@ -1,17 +1,23 @@
-inputs@{lib, nix-homebrew, homebrew-core, homebrew-cask, ...}:
+inputs@{
+  lib,
+  nix-homebrew,
+  homebrew-core,
+  homebrew-cask,
+  ...
+}:
 {
-  imports = [nix-homebrew.darwinModules.nix-homebrew];
+  imports = [ nix-homebrew.darwinModules.nix-homebrew ];
 
   nix-homebrew = {
     # Install Homebrew under the default prefix
     enable = true;
 
     # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-    enableRosetta = false; #lib.mkDefault true;
+    enableRosetta = false; # lib.mkDefault true;
 
     # User owning the Homebrew prefix
     user = "phazonic";
-    
+
     autoMigrate = true;
 
     # Optional: Declarative tap management
@@ -26,5 +32,3 @@ inputs@{lib, nix-homebrew, homebrew-core, homebrew-cask, ...}:
     mutableTaps = true;
   };
 }
-
-        

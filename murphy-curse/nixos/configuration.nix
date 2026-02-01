@@ -2,32 +2,41 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ inputs, lib, config, pkgs, ... }:
+{
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 
 {
-  nix.extraOptions = let
-    experimentalFeatures = builtins.concatStringsSep " " [
-      "flakes"
-      "nix-command"
-    ];
-  in ''
+  nix.extraOptions =
+    let
+      experimentalFeatures = builtins.concatStringsSep " " [
+        "flakes"
+        "nix-command"
+      ];
+    in
+    ''
       experimental-features = ${experimentalFeatures}
       warn-dirty = false
-  '';
+    '';
 
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.home-manager
-    ];
-  
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    inputs.home-manager.nixosModules.home-manager
+  ];
+
   home-manager = {
-    extraSpecialArgs = { inherit inputs; nixOptions = nix.extraOptions; };
+    extraSpecialArgs = {
+      inherit inputs;
+      nixOptions = config.nix.extraOptions;
+    };
     users = {
       phazonic = import ../home-manager/home.nix;
     };
   };
-
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -64,33 +73,32 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-
   # Bluetooth
   hardware.bluetooth.enable = true;
 
   # NVIDIA stuff https://nixos.wiki/wiki/Nvidia
   # TODO: Move to its own file
   hardware.graphics = {
-	enable = true;
+    enable = true;
   };
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
   services.xserver = {
-	enable = true;
-	videoDrivers = ["nvidia"];
+    enable = true;
+    videoDrivers = [ "nvidia" ];
   };
 
   hardware.nvidia = {
-	modesetting.enable = true;
-        powerManagement.enable = true;
-        powerManagement.finegrained = false; # Ok to use for RTX 3070
-        
-	open = true; # Use NVIDIA's open source kernel drivers
-        
-        nvidiaSettings = true;
+    modesetting.enable = true;
+    powerManagement.enable = true;
+    powerManagement.finegrained = false; # Ok to use for RTX 3070
 
-	package = config.boot.kernelPackages.nvidiaPackages.stable;
+    open = true; # Use NVIDIA's open source kernel drivers
+
+    nvidiaSettings = true;
+
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
 
   };
 
@@ -132,16 +140,19 @@
   users.users.phazonic = {
     isNormalUser = true;
     description = "Madeline Schneider";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
 
     shell = pkgs.nushell;
 
     packages = with pkgs; [
-       nushell
+      nushell
     ];
 
     openssh.authorizedKeys.keys = [
-  	"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDlWOd2WgZqVrbSn+1aNJszcFLyLLDAoimjBhfjhI7IkLeztUw5Bq21lUCgX6NbSpwQpXcsu5BGVLdpUn5rctsheBG7sNnf8PUAsKC3eEosBq1Z/If/uFVKe+KIIHDbALYWtONS51DRM2nLQ/FuKcx0MTVB7Fwwtp82otRWfWD7CjDD9Eq1O+wvhWYDdlC66KK+6j2SJNDYh4D4CHm2PlAQjoRyFiPaylmXTPZV8M8LXcnir6s8wI/DH2EuDJu8a0UOYudUHnzfi+xhysSLoS21/ZP3aLc3yHFbSUTBtwRi27c6LyagO/24Q8RV6tB2PyMnklJC3qCkphmHJ39+CBDCIcgx6WjmV6NTVLuWWJ/qsf0NUW4chcRd1LaQoFgiFroaIRfgajCZqF4boshK9x8NsPoaIFg/f0YqyxEWZj7q6MEJ2O2Nyx92WHIeBWhahTQQPGM6/2P8CwAEcbtOKKEUX4E7+1Q4+3SZXT1zjbNA0zDf+ebhsiVSgXq83oFJauE= phazonic@Madelines-Laptop.local" 
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDlWOd2WgZqVrbSn+1aNJszcFLyLLDAoimjBhfjhI7IkLeztUw5Bq21lUCgX6NbSpwQpXcsu5BGVLdpUn5rctsheBG7sNnf8PUAsKC3eEosBq1Z/If/uFVKe+KIIHDbALYWtONS51DRM2nLQ/FuKcx0MTVB7Fwwtp82otRWfWD7CjDD9Eq1O+wvhWYDdlC66KK+6j2SJNDYh4D4CHm2PlAQjoRyFiPaylmXTPZV8M8LXcnir6s8wI/DH2EuDJu8a0UOYudUHnzfi+xhysSLoS21/ZP3aLc3yHFbSUTBtwRi27c6LyagO/24Q8RV6tB2PyMnklJC3qCkphmHJ39+CBDCIcgx6WjmV6NTVLuWWJ/qsf0NUW4chcRd1LaQoFgiFroaIRfgajCZqF4boshK9x8NsPoaIFg/f0YqyxEWZj7q6MEJ2O2Nyx92WHIeBWhahTQQPGM6/2P8CwAEcbtOKKEUX4E7+1Q4+3SZXT1zjbNA0zDf+ebhsiVSgXq83oFJauE= phazonic@Madelines-Laptop.local"
     ];
   };
 
@@ -157,15 +168,17 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-   vim
-   wget
-   curl
-   neovim
-   git
-   tcpdump
-   ntfs3g
+    vim
+    wget
+    curl
+    neovim
+    git
+    tcpdump
+    ntfs3g
+    nixd
+    nixfmt
 
-   home-manager
+    home-manager
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -182,7 +195,7 @@
   services.openssh.enable = true;
 
   # Open ports in the firewall.
-   networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [ 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
@@ -194,14 +207,14 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.11"; # Did you read the comment?
-  
+
   programs.steam = {
-  	enable = true; # Master switch, already covered in installation
-  	remotePlay.openFirewall = true;  # Open ports in the firewall for Steam Remote Play
-  	dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server hosting
-  	# Other general flags if available can be set here.
+    enable = true; # Master switch, already covered in installation
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server hosting
+    # Other general flags if available can be set here.
   };
-  
+
   programs.gamemode.enable = true;
 
 }

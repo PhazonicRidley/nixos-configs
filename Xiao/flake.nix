@@ -23,25 +23,32 @@
 
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, ... }:
-  {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#Madelines-MacBook-Pro
-    # Necessary for using flakes on this system.
+  outputs =
+    inputs@{
+      self,
+      nix-darwin,
+      nixpkgs,
+      home-manager,
+      ...
+    }:
+    {
+      # Build darwin flake using:
+      # $ darwin-rebuild build --flake .#Madelines-MacBook-Pro
+      # Necessary for using flakes on this system.
 
-    darwinConfigurations."Xiao" = nix-darwin.lib.darwinSystem {
-      specialArgs = { 
-        inherit self; 
-        inherit (nixpkgs) lib;
-        inherit (inputs) nix-homebrew homebrew-core homebrew-cask;
-        inherit home-manager;
+      darwinConfigurations."Xiao" = nix-darwin.lib.darwinSystem {
+        specialArgs = {
+          inherit self;
+          inherit (nixpkgs) lib;
+          inherit (inputs) nix-homebrew homebrew-core homebrew-cask;
+          inherit home-manager;
+        };
+
+        modules = [
+          darwin/hosts/Xiao/configuration.nix
+          darwin/modules/homebrew.nix
+          darwin/modules/home-manager.nix
+        ];
       };
-
-      modules = [ 
-        darwin/hosts/Xiao/configuration.nix
-        darwin/modules/homebrew.nix
-        darwin/modules/home-manager.nix
-      ];
     };
-  };
 }

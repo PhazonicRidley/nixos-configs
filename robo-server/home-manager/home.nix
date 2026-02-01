@@ -1,19 +1,24 @@
-{ input, lib, config, pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   nixpkgs.config = {
-	allowUnfree = true;	
+    allowUnfree = true;
   };
 
-  nix.extraOptions = let
-    experimentalFeatures = builtins.concatStringsSep " " [
-      "flakes"
-      "nix-command"
-    ];
-  in ''
+  nix.extraOptions =
+    let
+      experimentalFeatures = builtins.concatStringsSep " " [
+        "flakes"
+        "nix-command"
+      ];
+    in
+    ''
       experimental-features = ${experimentalFeatures}
       warn-dirty = false
-  '';
+    '';
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -44,26 +49,26 @@
         }
       ];
     };
-   bash = {
-	enable = true;
-   };
+    bash = {
+      enable = true;
+    };
 
     starship = {
       enable = true;
       enableZshIntegration = true;
       enableBashIntegration = true;
       settings = {
-	shell = {
-		disabled = false;
-		format = "[$indicator]($style) ";
-		bash_indicator = "🐚";
-		zsh_indicator = "⚡";
-	};
-	
-	nix_shell = {
-		disabled = false;
-		heuristic = true;
-	};
+        shell = {
+          disabled = false;
+          format = "[$indicator]($style) ";
+          bash_indicator = "🐚";
+          zsh_indicator = "⚡";
+        };
+
+        nix_shell = {
+          disabled = false;
+          heuristic = true;
+        };
       };
     };
   };
@@ -130,13 +135,13 @@
     pkgs.vim
     pkgs.python314
     pkgs.uv
-    
+
     # Compiler nonsense
     pkgs.llvmPackages_20.libcxxClang
     pkgs.llvmPackages_20.clang-tools
     pkgs.python314Packages.cmake
     pkgs.python314Packages.ninja
-   
+
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

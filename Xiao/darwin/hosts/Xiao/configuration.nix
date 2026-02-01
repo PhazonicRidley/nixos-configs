@@ -1,4 +1,11 @@
-inputs@{ self, pkgs, config, lib, ...}: {
+inputs@{
+  self,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+{
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   nixpkgs.config.allowUnfree = true;
@@ -6,13 +13,13 @@ inputs@{ self, pkgs, config, lib, ...}: {
   networking.hostName = "Xiao";
   system.primaryUser = "phazonic";
   environment.variables = {
-	EDITOR = "vim";
-	BROWSER = "firefox";
-	NIXPKGS_ALLOW_UNFREE = "1";
+    EDITOR = "vim";
+    BROWSER = "firefox";
+    NIXPKGS_ALLOW_UNFREE = "1";
   };
 
-  environment.systemPackages =
-  [ pkgs.vim
+  environment.systemPackages = [
+    pkgs.vim
     pkgs.neovim
     pkgs.fastfetch
     pkgs.bat
@@ -31,7 +38,7 @@ inputs@{ self, pkgs, config, lib, ...}: {
       eval "$(starship init zsh)"
     '';
     shellInit = ''
-	export PATH='/Users/phazonic/.local/bin':$PATH
+      	export PATH='/Users/phazonic/.local/bin':$PATH
     '';
   };
 
@@ -59,25 +66,26 @@ inputs@{ self, pkgs, config, lib, ...}: {
   };
 
   system.stateVersion = 6;
-  system.activationScripts.applications.text = let
-  env = pkgs.buildEnv {
-  name = "system-applications";
-  paths = config.environment.systemPackages;
-  pathsToLink = "/Applications";
-  };
-  in
-  pkgs.lib.mkForce ''
-  # Set up applications.
-  echo "setting up /Applications..." >&2
-  rm -rf /Applications/Nix\ Apps
-  mkdir -p /Applications/Nix\ Apps
-  find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-  while read -r src; do
-    app_name=$(basename "$src")
-    echo "copying $src" >&2
-    ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
-  done
-  '';
+  system.activationScripts.applications.text =
+    let
+      env = pkgs.buildEnv {
+        name = "system-applications";
+        paths = config.environment.systemPackages;
+        pathsToLink = "/Applications";
+      };
+    in
+    pkgs.lib.mkForce ''
+      # Set up applications.
+      echo "setting up /Applications..." >&2
+      rm -rf /Applications/Nix\ Apps
+      mkdir -p /Applications/Nix\ Apps
+      find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
+      while read -r src; do
+        app_name=$(basename "$src")
+        echo "copying $src" >&2
+        ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+      done
+    '';
 
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
@@ -86,7 +94,7 @@ inputs@{ self, pkgs, config, lib, ...}: {
   homebrew = {
     enable = true;
     taps = [
-      "homebrew/cask"  # Explicitly keep this tap
+      "homebrew/cask" # Explicitly keep this tap
     ];
 
     brews = [
@@ -100,10 +108,10 @@ inputs@{ self, pkgs, config, lib, ...}: {
       "docker"
       "docker-compose"
       "qemu"
-      "lima-additional-guestagents" 
+      "lima-additional-guestagents"
     ];
 
-   casks = [
+    casks = [
       "scroll-reverser"
       "saleae-logic"
       "signal"

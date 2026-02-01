@@ -1,8 +1,8 @@
-{ inputs, lib, config, pkgs, nixOptions, ... }:
+{ pkgs, nixOptions, ... }:
 
 {
   nixpkgs.config = {
-	allowUnfree = true;	
+    allowUnfree = true;
   };
 
   nix.extraOptions = nixOptions;
@@ -61,21 +61,21 @@
 
   programs = {
     neovim = {
-    enable = true;
-    viAlias = true;
-    vimAlias = true;
-        initLua = ''
-		
-        vim.opt.clipboard = "unnamedplus"
-        
-        vim.opt.number = true
-      '';		
+      enable = true;
+      viAlias = true;
+      vimAlias = true;
+      initLua = ''
+        		
+                vim.opt.clipboard = "unnamedplus"
+                
+                vim.opt.number = true
+      '';
     };
 
     vscode.enable = true;
-    fastfetch = { 
-  	enable = true;
-        settings = { 
+    fastfetch = {
+      enable = true;
+      settings = {
         modules = [
           "title"
           "separator"
@@ -104,7 +104,7 @@
           "localip"
           "locale"
         ];
-	};
+      };
     };
     hyfetch = {
       enable = true;
@@ -123,7 +123,7 @@
 
     git = {
       enable = true;
-      
+
       settings = {
         user = {
           name = "PhazonicRidley";
@@ -143,23 +143,23 @@
         "__pycache__"
       ];
     };
-    
+
     discord.enable = true;
     lutris.enable = true;
-    
+
     tmux = {
-  	enable = true;
-  	mouse = true;
-  
-  	extraConfig = ''
-    	# Modern clipboard integration via OSC 52
-    	set -g set-clipboard on
-    
-    	# Vi-style keys for copy mode
-    	setw -g mode-keys vi
-  	'';
+      enable = true;
+      mouse = true;
+
+      extraConfig = ''
+          	# Modern clipboard integration via OSC 52
+          	set -g set-clipboard on
+          
+          	# Vi-style keys for copy mode
+          	setw -g mode-keys vi
+        	'';
     };
-    
+
   };
 
   home.packages = with pkgs; [
@@ -187,7 +187,7 @@
     iputils
     dnsutils
     htop
-   
+
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

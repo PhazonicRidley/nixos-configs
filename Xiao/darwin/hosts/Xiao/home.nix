@@ -11,10 +11,10 @@
         {
           name = "zsh-autosuggestions";
           src = pkgs.fetchFromGitHub {
-                owner = "zsh-users";
-                repo = "zsh-autosuggestions";
-                rev = "v0.4.0";
-                sha256 = "0z6i9wjjklb4lvr7zjhbphibsyx51psv50gm07mbb0kj9058j6kc";
+            owner = "zsh-users";
+            repo = "zsh-autosuggestions";
+            rev = "v0.4.0";
+            sha256 = "0z6i9wjjklb4lvr7zjhbphibsyx51psv50gm07mbb0kj9058j6kc";
           };
         }
         {
@@ -33,10 +33,10 @@
         clangd-brew = "/opt/homebrew/Cellar/llvm@20/20.1.7/bin/clangd";
       };
     };
-    
+
     nushell = {
       enable = true;
-      plugins = [pkgs.nushellPlugins.net];
+      plugins = [ pkgs.nushellPlugins.net ];
 
       shellAliases = {
         clang-20 = "/opt/homebrew/Cellar/llvm/20.1.7/bin/clang";
@@ -52,11 +52,11 @@
     };
 
     vscode = {
-	    enable = true;
+      enable = true;
     };
 
     firefox = {
-	    enable = true;
+      enable = true;
     };
 
     htop.enable = true;
@@ -68,7 +68,6 @@
     };
   };
 
- 
   # Environment variables (optional)
   home.sessionVariables = {
     EDITOR = "vim";
@@ -77,11 +76,13 @@
   };
 
   home.packages = [
-    (pkgs.python313.withPackages (ps: with ps; [
-	pyserial
-	cmake
-	pip
-    ]))
+    (pkgs.python313.withPackages (
+      ps: with ps; [
+        pyserial
+        cmake
+        pip
+      ]
+    ))
     pkgs.conan
     pkgs.python313Packages.pyocd
     # pkgs.python313Packages.pyserial
@@ -106,5 +107,5 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-  
+
 }

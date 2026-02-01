@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "A less basic flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -27,7 +27,7 @@
       };
     in
     {
-      nixosConfigurations.RoboServer = nixpkgs.lib.nixosSystem {
+      nixosConfigurations."murphy-curse" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs system; };
         modules = [
           ./nixos/configuration.nix
