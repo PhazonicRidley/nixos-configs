@@ -22,7 +22,7 @@
     ];
   
   home-manager = {
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = { inherit inputs; nixOptions = nix.extraOptions; };
     users = {
       phazonic = import ../home-manager/home.nix;
     };
@@ -201,19 +201,6 @@
   	dedicatedServer.openFirewall = true; # Open ports for Source Dedicated Server hosting
   	# Other general flags if available can be set here.
   };
-
-  # fileSystems =
-  # let
-  #   ntfs-drives = [
-  #     "/home/phazonic/hdd-ntfs"
-  #   ];
-  # in
-  # lib.genAttrs ntfs-drives (path: {
-  #   options = [
-  #     "uid=0C800E8E800E7E88" # REPLACE "$UID" WITH YOUR ACTUAL UID!
-  #     # "nofail"
-  #   ];
-  # });
   
   programs.gamemode.enable = true;
 

@@ -1,19 +1,21 @@
-{ input, lib, config, pkgs, ... }:
+{ inputs, lib, config, pkgs, nixOptions, ... }:
 
 {
   nixpkgs.config = {
 	allowUnfree = true;	
   };
 
-  nix.extraOptions = let
-    experimentalFeatures = builtins.concatStringsSep " " [
-      "flakes"
-      "nix-command"
-    ];
-  in ''
-      experimental-features = ${experimentalFeatures}
-      warn-dirty = false
-  '';
+  nix.extraOptions = nixOptions;
+
+  # nix.extraOptions = let
+  #   experimentalFeatures = builtins.concatStringsSep " " [
+  #     "flakes"
+  #     "nix-command"
+  #   ];
+  # in ''
+  #     experimental-features = ${experimentalFeatures}
+  #     warn-dirty = false
+  # '';
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.

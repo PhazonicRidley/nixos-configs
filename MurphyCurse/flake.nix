@@ -21,7 +21,7 @@
 	};
   in 
   {
-	nixosConfigurations."murphy-curse" = nixpkgs.lib.nixosSystem {
+	nixosConfigurations."MurphyCurse" = nixpkgs.lib.nixosSystem {
 		specialArgs = { inherit inputs system; };
 		modules = [
 			./nixos/configuration.nix
