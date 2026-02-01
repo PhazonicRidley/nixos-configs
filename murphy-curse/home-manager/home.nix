@@ -7,6 +7,7 @@
 
   nix.extraOptions = nixOptions;
 
+  # TODO: Move to a common folder
   # nix.extraOptions = let
   #   experimentalFeatures = builtins.concatStringsSep " " [
   #     "flakes"
@@ -65,14 +66,69 @@
       viAlias = true;
       vimAlias = true;
       initLua = ''
-        		
-                vim.opt.clipboard = "unnamedplus"
-                
-                vim.opt.number = true
+        vim.opt.clipboard = "unnamedplus"
+
+        vim.opt.number = true
       '';
     };
 
-    vscode.enable = true;
+    vscode = {
+      enable = true;
+      profiles."phazonic" = {
+        userSettings = {
+          "nix.enableLanguageServer" = true;
+          "nix.formatterPath" = "nixfmt";
+          "nix.serverPath" = "nixd";
+          "editor.formatOnSave" = true;
+          "nix.serverSettings" = {
+            nixd = {
+              formatting = {
+                command = [ "nixfmt" ];
+              };
+            };
+          };
+          "github.copilot.enable" = {
+            "*" = false;
+            "plaintext" = false;
+            "markdown" = false;
+            "scminput" = false;
+          };
+        };
+      };
+
+      extensions =
+        with pkgs.vscode-extensions;
+        [
+          jnoortheen.nix-ide
+          ms-python.python
+          llvm-vs-code-extensions.vscode-clangd
+          ms-vscode.cmake-tools
+
+        ]
+        ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+          {
+            name = "remote-ssh-edit";
+            publisher = "ms-vscode-remote";
+            version = "0.47.2";
+            sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
+          }
+
+          {
+            name = "gitlens";
+            publisher = "eamodio";
+            version = "2026.1.704";
+            sha256 = "sha256-fxFHRW9ooewKyBlmfOWlhVfq7mSLq3uEe1npST85+dE=";
+          }
+
+          {
+            name = "vscode-lldb";
+            publisher = "vadimcn";
+            version = "1.12.1";
+            sha256 = "sha256-PEwhXVKYOF313tLJSB+QUfOfAHnwRSoKPLdHaGl79Xk=";
+          }
+        ];
+    };
+
     fastfetch = {
       enable = true;
       settings = {
@@ -187,7 +243,8 @@
     iputils
     dnsutils
     htop
-
+    nixd
+    nixfmt
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -223,6 +280,12 @@
   #
   home.sessionVariables = {
     EDITOR = "vim";
+  };
+
+  # Shell Aliases
+  home.shellAliases = {
+    ll = "ls -l";
+    optnix = "nixos option";
   };
 
   # Let Home Manager install and manage itself.

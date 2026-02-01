@@ -7,6 +7,8 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixos-cli.url = "github:nix-community/nixos-cli";
   };
 
   outputs =
@@ -14,6 +16,7 @@
       self,
       nixpkgs,
       home-manager,
+      nixos-cli,
       ...
     }@inputs:
     let
@@ -31,6 +34,7 @@
         specialArgs = { inherit inputs system; };
         modules = [
           ./nixos/configuration.nix
+          nixos-cli.nixosModules.nixos-cli
         ];
       };
 

@@ -29,6 +29,7 @@
   ];
 
   home-manager = {
+    backupFileExtension = "backup";
     extraSpecialArgs = {
       inherit inputs;
       nixOptions = config.nix.extraOptions;
@@ -87,6 +88,14 @@
   services.xserver = {
     enable = true;
     videoDrivers = [ "nvidia" ];
+  };
+
+  # Nixos Cli
+  services.nixos-cli = {
+    enable = true;
+    config = {
+      # Whatever settings desired.
+    };
   };
 
   hardware.nvidia = {
