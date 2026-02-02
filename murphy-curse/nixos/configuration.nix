@@ -6,10 +6,29 @@
   inputs,
   config,
   pkgs,
+  options,
   ...
 }:
 
+let
+  optnixLib = inputs.optnix.mkLib pkgs;
+in
 {
+
+  programs.optnix = {
+    enable = true;
+    settings = {
+      scopes = {
+        murphy-curse = {
+          options-list-file = optnixLib.mkOptionsList { inherit options; };
+          evaluator = "nix eval /home/phazonic/nixos-configs/murphy-curse#nixosConfigurations.murphy-curse.config.{{ .Option }}";
+        };
+      };
+
+      default_scope = "murphy-curse";
+    };
+  };
+
   nix.extraOptions =
     let
       experimentalFeatures = builtins.concatStringsSep " " [
@@ -216,6 +235,10 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.11"; # Did you read the comment?
+
+  environment.variables = {
+    NIXOS_CONFIG = "/home/phazonic/nixos-configs/murphy-curse";
+  };
 
   programs.steam = {
     enable = true; # Master switch, already covered in installation
