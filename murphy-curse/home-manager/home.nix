@@ -75,12 +75,21 @@ in
       ];
     };
 
+    bash.enable = true;
+
     nushell.enable = true;
 
     starship = {
       enable = true;
       enableZshIntegration = true;
       enableNushellIntegration = true;
+      enableBashIntegration = true;
+    };
+
+    direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
     };
   };
 
@@ -217,6 +226,7 @@ in
     nixfmt
     bat
     papirus-icon-theme
+    google-chrome
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

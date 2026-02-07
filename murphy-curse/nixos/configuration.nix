@@ -65,6 +65,9 @@ in
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Kernel parameters
+  boot.kernelParams = [ "usbcore.autosuspend=-1" ];
+
   networking.hostName = "MurphyCurse"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -109,6 +112,16 @@ in
     videoDrivers = [ "nvidia" ];
   };
 
+  # serial
+
+  networking.modemmanager.enable = true;
+  services.brltty.enable = false;
+
+  services.udev.extraRules = ''
+  KERNEL=="ttyUSB[0-9]*", MODE="0666"
+  KERNEL=="ttyACM[0-9]*", MODE="0666"
+'';
+
   # Nixos Cli
   services.nixos-cli = {
     enable = true;
@@ -139,6 +152,9 @@ in
     layout = "us";
     variant = "";
   };
+
+  # Enable docker
+  virtualisation.docker.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -171,6 +187,8 @@ in
     extraGroups = [
       "networkmanager"
       "wheel"
+      "docker"
+      "dialout"
     ];
 
     shell = pkgs.nushell;
@@ -208,6 +226,19 @@ in
 
     home-manager
   ];
+
+  # Run non nixos binaries
+  programs.nix-ld = {
+    enable = true;
+
+    libraries = with pkgs; [
+      stdenv.cc.cc.lib
+      zlib
+      zstd
+      libxml2
+
+    ];
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
