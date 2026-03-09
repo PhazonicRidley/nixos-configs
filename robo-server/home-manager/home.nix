@@ -71,13 +71,20 @@
         };
       };
     };
-  };
 
-  # The home.packages option allows you to install Nix packages into your
-  # environment.
+    neovim = {
+      enable = true;
+      viAlias = true;
+      vimAlias = true;
+      initLua = ''
+        vim.opt.clipboard = "unnamedplus"
 
-  programs = {
+        vim.opt.number = true
+      '';
+    };
+
     vscode.enable = true;
+
     hyfetch = {
       enable = true;
       settings = {
@@ -115,6 +122,9 @@
       ];
     };
   };
+
+  # The home.packages option allows you to install Nix packages into your
+  # environment.
   home.packages = [
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.

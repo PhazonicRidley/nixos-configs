@@ -22,12 +22,13 @@
       warn-dirty = false
     '';
 
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    ./nginx.nix
-    inputs.home-manager.nixosModules.home-manager
-  ];
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+      ./synapse.nix
+      ./nginx.nix
+      inputs.home-manager.nixosModules.home-manager
+    ];
 
   # Home Manager invocation
   home-manager = {
@@ -169,10 +170,37 @@
   };
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+    networking.firewall.allowedTCPPorts = [ 53 22 ];
+    networking.firewall.allowedUDPPorts = [ 53 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+
+# Run non nixos binaries
+  programs.nix-ld = {
+    enable = true;
+
+    libraries = with pkgs; [
+      stdenv.cc.cc.lib
+      zlib
+      zstd
+      # libxml2
+
+    ];
+  };
+
+
+  # DNS server
+  services.dnsmasq = {
+  	enable = true;
+  	settings = {
+    		server = [ "1.1.1.1" "8.8.8.8" ];
+		address = [ "/phazonicridley.com/192.168.1.251" "/phazonicridley.xyz/192.168.1.251" ];
+		listen-address = [ "127.0.0.1" "192.168.1.251" ];
+		bind-interfaces = true;
+        };
+
+   };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
