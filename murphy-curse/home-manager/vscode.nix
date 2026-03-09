@@ -50,10 +50,12 @@
         ms-vscode.cmake-tools
         vadimcn.vscode-lldb
         pkief.material-icon-theme
-
+	anthropic.claude-code
+	ms-vscode-remote.vscode-remote-extensionpack
+	ms-vscode-remote.remote-ssh
       ]
       ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {
+       {
           name = "remote-ssh-edit";
           publisher = "ms-vscode-remote";
           version = "0.47.2";

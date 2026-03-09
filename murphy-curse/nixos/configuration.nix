@@ -68,16 +68,6 @@ in
   # Kernel parameters
   boot.kernelParams = [ "usbcore.autosuspend=-1" ];
 
-  networking.hostName = "MurphyCurse"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
 
@@ -118,9 +108,9 @@ in
   services.brltty.enable = false;
 
   services.udev.extraRules = ''
-  KERNEL=="ttyUSB[0-9]*", MODE="0666"
-  KERNEL=="ttyACM[0-9]*", MODE="0666"
-'';
+    KERNEL=="ttyUSB[0-9]*", MODE="0666"
+    KERNEL=="ttyACM[0-9]*", MODE="0666"
+  '';
 
   # Nixos Cli
   services.nixos-cli = {
@@ -253,8 +243,26 @@ in
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  # Networking
+  networking.hostName = "MurphyCurse"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  # Enable networking
+  networking.networkmanager = {
+    enable = true;
+    dns = "none";
+  };
+
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.nameservers = [
+    "192.168.1.251"
+    "1.1.1.1"
+  ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
