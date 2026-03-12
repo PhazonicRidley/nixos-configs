@@ -1,8 +1,6 @@
 # Xiao - MacBook Pro home-manager configuration
 {
   pkgs,
-  inputs,
-  username,
   ...
 }:
 
