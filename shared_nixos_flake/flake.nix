@@ -28,6 +28,7 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core = { url = "github:homebrew/homebrew-core"; flake = false; };
     homebrew-cask = { url = "github:homebrew/homebrew-cask"; flake = false; };
+    mac-app-util.url = "github:hraban/mac-app-util";
   };
 
   outputs = { nixpkgs, home-manager, nix-darwin, ... }@inputs: let

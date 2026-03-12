@@ -1,5 +1,10 @@
 # MurphyCurse - Desktop workstation with NVIDIA and KDE Plasma
-{ inputs, config, pkgs, options, ... }:
+{
+  inputs,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   optnixLib = inputs.optnix.mkLib pkgs;
@@ -51,7 +56,7 @@ in
   # NixOS CLI
   services.nixos-cli = {
     enable = true;
-    config = {};
+    config = { };
   };
 
   # optnix configuration

@@ -3,18 +3,10 @@
 { inputs, pkgs, ... }:
 
 {
-  # Nix settings
-  nix.extraOptions =
-    let
-      experimentalFeatures = builtins.concatStringsSep " " [
-        "flakes"
-        "nix-command"
-      ];
-    in
-    ''
-      experimental-features = ${experimentalFeatures}
-      warn-dirty = false
-    '';
+  imports = [
+    ../common/nix-settings.nix
+    inputs.home-manager.nixosModules.home-manager
+  ];
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
@@ -73,8 +65,6 @@
   ];
 
   # Home-manager integration
-  imports = [ inputs.home-manager.nixosModules.home-manager ];
-
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     backupFileExtension = "backup";

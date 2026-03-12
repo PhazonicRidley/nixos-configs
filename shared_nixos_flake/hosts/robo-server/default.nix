@@ -1,5 +1,11 @@
 # RoboServer - Home server with Matrix Synapse, Nginx, DNS
-{ inputs, config, pkgs, domains, ... }:
+{
+  inputs,
+  config,
+  pkgs,
+  domains,
+  ...
+}:
 
 {
   imports = [
@@ -40,16 +46,28 @@
   ];
 
   # Firewall
-  networking.firewall.allowedTCPPorts = [ 53 22 ];
+  networking.firewall.allowedTCPPorts = [
+    53
+    22
+  ];
   networking.firewall.allowedUDPPorts = [ 53 ];
 
   # DNS server
   services.dnsmasq = {
     enable = true;
     settings = {
-      server = [ "1.1.1.1" "8.8.8.8" ];
-      address = [ "/phazonicridley.com/192.168.1.251" "/phazonicridley.xyz/192.168.1.251" ];
-      listen-address = [ "127.0.0.1" "192.168.1.251" ];
+      server = [
+        "1.1.1.1"
+        "8.8.8.8"
+      ];
+      address = [
+        "/phazonicridley.com/192.168.1.251"
+        "/phazonicridley.xyz/192.168.1.251"
+      ];
+      listen-address = [
+        "127.0.0.1"
+        "192.168.1.251"
+      ];
       bind-interfaces = true;
     };
   };

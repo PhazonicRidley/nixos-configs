@@ -8,6 +8,7 @@ in
 {
   imports = [
     ../../home
+    ../../modules/home-manager/nushell.nix
     ../../modules/home-manager/plasma.nix
     ../../modules/home-manager/vscode.nix
     inputs.optnix.homeModules.optnix
@@ -26,10 +27,6 @@ in
       };
     };
   };
-
-  # Nushell (murphy-curse uses nushell as default)
-  programs.nushell.enable = true;
-  programs.starship.enableNushellIntegration = true;
 
   # Desktop applications
   programs.discord.enable = true;
