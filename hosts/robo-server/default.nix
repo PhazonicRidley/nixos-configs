@@ -66,7 +66,7 @@
   	enable = true;
   	settings = {
     	server = [ "1.1.1.1" "8.8.8.8" ];
-		  address = [ "/phazonicridley.com/192.168.128.128" "/phazonicridley.xyz/192.168.128.128" ];
+		  address = [ "/phazonicridley.com/192.168.128.128" ];
 		  listen-address = [ "127.0.0.1" "192.168.128.128" ];
 		  bind-interfaces = true;
     };
