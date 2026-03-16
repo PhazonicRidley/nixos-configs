@@ -50,7 +50,10 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+  	enable = true;
+	insertNameservers = [ "127.0.0.1" "1.1.1.1" "8.8.8.8" ];
+  };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -195,8 +198,8 @@
   	enable = true;
   	settings = {
     		server = [ "1.1.1.1" "8.8.8.8" ];
-		address = [ "/phazonicridley.com/192.168.1.251" "/phazonicridley.xyz/192.168.1.251" ];
-		listen-address = [ "127.0.0.1" "192.168.1.251" ];
+		address = [ "/phazonicridley.com/192.168.128.128" "/phazonicridley.xyz/192.168.128.128" ];
+		listen-address = [ "127.0.0.1" "192.168.128.128" ];
 		bind-interfaces = true;
         };
 
