@@ -7,8 +7,6 @@
     ../../home
   ];
 
-  # Basic VSCode (no desktop extensions)
-  programs.vscode.enable = true;
 
   # Server-specific development packages
   home.packages = with pkgs; [
