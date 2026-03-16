@@ -16,6 +16,7 @@ in
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/desktop-plasma.nix
     ../../modules/nixos/gaming.nix
+    ../../modules/nixos/avahi.nix
     inputs.nixos-cli.nixosModules.nixos-cli
     inputs.optnix.nixosModules.optnix
   ];
@@ -91,13 +92,11 @@ in
     libxml2
   ];
 
+  # Flatpak
+  services.flatpak.enable = true;
+
   # Firewall
   networking.firewall.allowedTCPPorts = [ 22 ];
-  networking.nameservers = [
-    "192.168.1.251"
-    "1.1.1.1"
-  ];
-  networking.networkmanager.dns = "none";
 
   # Home-manager user config
   home-manager.users.phazonic = import ./home.nix;
