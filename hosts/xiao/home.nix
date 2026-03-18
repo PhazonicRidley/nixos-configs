@@ -11,9 +11,6 @@
     ../../modules/home-manager/vscode.nix
   ];
 
-  # Firefox
-  programs.firefox.enable = true;
-
   # Shell aliases for Homebrew LLVM
   home.shellAliases = {
     clang-21 = "/opt/homebrew/opt/llvm@21/bin/clang";
@@ -37,7 +34,6 @@
 
     # Build tools
     gcc
-
   ];
 
   # Enable fontconfig for user fonts

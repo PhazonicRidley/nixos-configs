@@ -10,6 +10,8 @@
 
   imports = [ inputs.nix-homebrew.darwinModules.nix-homebrew ];
 
+  config.homebrew.taps = [ "homebrew/cask" "homebrew/core" ];
+
   config.nix-homebrew = {
     enable = true;
     enableRosetta = false;

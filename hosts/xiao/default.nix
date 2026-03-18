@@ -91,6 +91,7 @@
     extraSpecialArgs = {
       inherit inputs;
       username = "phazonic";
+      isGlobalPkgs = true;
     };
     sharedModules = [
       inputs.mac-app-util.homeManagerModules.default
