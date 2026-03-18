@@ -3,13 +3,15 @@
 # Can be used standalone: nix run home-manager -- switch --flake .#phazonic@linux
 {
   pkgs,
+  lib,
   username ? "phazonic",
+  isGlobalPkgs ? false,
   ...
 }:
 
 {
-  nixpkgs.config.allowUnfree = true;
-
+  nixpkgs.config.allowUnfree = lib.mkIf (!isGlobalPkgs) true;
+  
   home = {
     inherit username;
     homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
