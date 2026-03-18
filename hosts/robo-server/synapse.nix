@@ -1,4 +1,7 @@
-{ config, pkgs, lib, domains, ... }:
+{
+  domains,
+  ...
+}:
 {
   services.matrix-synapse = {
     enable = true;
