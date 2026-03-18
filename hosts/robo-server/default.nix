@@ -1,9 +1,7 @@
 # RoboServer - Home server with Matrix Synapse, Nginx, DNS
 {
   inputs,
-  config,
   pkgs,
-  domains,
   ...
 }:
 
@@ -15,7 +13,6 @@
     ../../modules/nixos/base.nix
     ../../modules/nixos/avahi.nix
   ];
-
 
   # User configuration
   users.users.phazonic = {
@@ -42,33 +39,41 @@
     htop
   ];
 
-
   networking = {
-    
+
     networkmanager = {
-  	  enable = true;
-	    insertNameservers = [ "127.0.0.1" "1.1.1.1" "8.8.8.8" ];
+      enable = true;
+      insertNameservers = [
+        "127.0.0.1"
+        "1.1.1.1"
+        "8.8.8.8"
+      ];
     };
 
-  hostName = "RoboServer";
+    hostName = "RoboServer";
     firewall = {
-      allowedTCPPorts = [ 53 22 ];
+      allowedTCPPorts = [
+        53
+        22
+      ];
       allowedUDPPorts = [ 53 ];
     };
   };
 
-
-
-
-
   # DNS server
   services.dnsmasq = {
-  	enable = true;
-  	settings = {
-    	server = [ "1.1.1.1" "8.8.8.8" ];
-		  address = [ "/phazonicridley.com/192.168.128.128" ];
-		  listen-address = [ "127.0.0.1" "192.168.128.128" ];
-		  bind-interfaces = true;
+    enable = true;
+    settings = {
+      server = [
+        "1.1.1.1"
+        "8.8.8.8"
+      ];
+      address = [ "/phazonicridley.com/192.168.128.128" ];
+      listen-address = [
+        "127.0.0.1"
+        "192.168.128.128"
+      ];
+      bind-interfaces = true;
     };
 
   };

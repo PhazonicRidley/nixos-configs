@@ -21,6 +21,7 @@
 
     shellAliases = {
       ll = "ls -l";
+      code = "code --profile ${username}";
     };
   };
 

@@ -79,7 +79,10 @@
       };
 
       darwinConfigurations.Xiao = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit inputs; };
+        specialArgs = {
+          inherit inputs;
+          user = "phazonic";
+        };
         modules = [ ./hosts/xiao ];
       };
 

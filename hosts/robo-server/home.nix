@@ -1,12 +1,11 @@
 # RoboServer home-manager configuration
 # Server with development tools
-{ inputs, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
     ../../home
   ];
-
 
   # Server-specific development packages
   home.packages = with pkgs; [
