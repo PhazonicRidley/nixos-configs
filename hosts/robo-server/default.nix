@@ -10,6 +10,7 @@
     ./hardware-configuration.nix
     ./synapse.nix
     ./nginx.nix
+    ./conan-server.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/avahi.nix
   ];
