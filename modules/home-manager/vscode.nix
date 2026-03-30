@@ -19,6 +19,9 @@
         "nix.formatterPath" = "nixfmt";
         "nix.serverPath" = "nixd";
         "editor.formatOnSave" = true;
+        "clangd.arguments" = [
+          "--query-driver=**/g++,**/*-g++,**/clang++,**/*-clang++"
+        ];
         "github.copilot.enable" = {
           "*" = false;
           "plaintext" = false;

@@ -57,6 +57,7 @@
       "discord"
       "steam"
       "webex"
+      "firefox"
     ];
   };
 
