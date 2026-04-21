@@ -15,6 +15,7 @@
     profiles."phazonic" = {
       userSettings = {
         "nix.enableLanguageServer" = true;
+        "workbench.colorTheme" = "Dark Modern";
         "workbench.iconTheme" = "material-icon-theme";
         "nix.formatterPath" = "nixfmt";
         "nix.serverPath" = "nixd";
