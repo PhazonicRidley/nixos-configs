@@ -1,6 +1,6 @@
 # Nushell home-manager configuration
 # Separate from base home config for systems that want POSIX compatibility by default
-{ ... }:
+{ username, ... }:
 
 {
   programs.nushell = {
@@ -8,7 +8,7 @@
     # plugins = [ pkgs.nushellPlugins.net ];  # Currently broken in nixpkgs
     shellAliases = {
       ll = "ls -l";
-      code = "code --profile phazonic";
+      code = "code --profile ${username}";
     };
   };
 
