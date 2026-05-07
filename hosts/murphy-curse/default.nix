@@ -95,6 +95,14 @@ in
   # Flatpak
   services.flatpak.enable = true;
 
+  # RGB
+  services.hardware.openrgb = {
+    enable = true;
+    package = pkgs.openrgb-with-all-plugins;
+    motherboard = "amd";
+    server.port = 6742;
+  };
+
   # Firewall
   networking.firewall.allowedTCPPorts = [ 22 ];
 
