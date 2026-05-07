@@ -11,7 +11,7 @@
 
 {
   nixpkgs.config.allowUnfree = lib.mkIf (!isGlobalPkgs) true;
-  
+
   home = {
     inherit username;
     homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";

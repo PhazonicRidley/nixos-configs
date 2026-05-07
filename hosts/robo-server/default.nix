@@ -90,6 +90,7 @@
   home-manager.extraSpecialArgs = {
     inherit inputs;
     username = "phazonic";
+    isGlobalPkgs = false;
   };
 
   system.stateVersion = "25.05";

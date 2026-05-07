@@ -29,6 +29,7 @@
           "markdown" = false;
           "scminput" = false;
         };
+        "claude-code.model" = "sonnet";
       };
       extensions =
         with pkgs.vscode-extensions;
