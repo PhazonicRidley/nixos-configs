@@ -21,7 +21,8 @@
         "nix.serverPath" = "nixd";
         "editor.formatOnSave" = true;
         "clangd.arguments" = [
-          "--query-driver=**/g++,**/*-g++,**/clang++,**/*-clang++"
+          "--query-driver=**/g++,**/*-g++"
+          "--clang-tidy"
         ];
         "github.copilot.enable" = {
           "*" = false;
