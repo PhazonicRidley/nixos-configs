@@ -36,6 +36,11 @@
     gcc
   ];
 
+  # Xiao-specific VSCode settings
+  programs.vscode.profiles."phazonic".userSettings = {
+    "clangd.path" = "/opt/homebrew/opt/llvm@21/bin/clangd";
+  };
+
   # Enable fontconfig for user fonts
   fonts.fontconfig.enable = true;
 }

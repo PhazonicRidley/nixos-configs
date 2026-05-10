@@ -26,9 +26,6 @@
       code = "code --profile ${username}";
     };
 
-    packages = with pkgs; [
-      lmstudio
-    ];
   };
 
   programs = {
