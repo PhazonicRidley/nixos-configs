@@ -9,6 +9,7 @@
     ../../home
     ../../modules/home-manager/nushell.nix
     ../../modules/home-manager/vscode.nix
+    ../../modules/home-manager/obsidian.nix
   ];
 
   # Shell aliases for Homebrew LLVM

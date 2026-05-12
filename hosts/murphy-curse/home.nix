@@ -11,6 +11,7 @@ in
     ../../modules/home-manager/nushell.nix
     ../../modules/home-manager/plasma.nix
     ../../modules/home-manager/vscode.nix
+    ../../modules/home-manager/obsidian.nix
     inputs.optnix.homeModules.optnix
     inputs.plasma-manager.homeModules.plasma-manager
   ];
