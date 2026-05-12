@@ -24,14 +24,10 @@
           "--query-driver=**/g++,**/*-g++"
           "--clang-tidy"
         ];
-        "github.copilot.enable" = {
-          "*" = false;
-          "plaintext" = false;
-          "markdown" = false;
-          "scminput" = false;
-        };
-        "claude-code.model" = "sonnet";
+        "claudeCode.model" = "sonnet";
+        "claudeCode.preferredLocation" = "panel";
       };
+
       extensions =
         with pkgs.vscode-extensions;
         [
@@ -44,6 +40,7 @@
           anthropic.claude-code
           ms-vscode-remote.vscode-remote-extensionpack
           ms-vscode-remote.remote-ssh
+          github.vscode-github-actions
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
