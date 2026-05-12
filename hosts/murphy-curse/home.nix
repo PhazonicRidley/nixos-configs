@@ -6,6 +6,8 @@ let
   optnixLib = inputs.optnix.mkLib pkgs;
 in
 {
+  nixpkgs.config.allowUnfree = true;
+
   imports = [
     ../../home
     ../../modules/home-manager/nushell.nix
