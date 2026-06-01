@@ -39,6 +39,12 @@
     ];
   };
 
+
+  fileSystems."/home/phazonic/camdrive" = {
+    device = "/dev/disk/by-uuid/f022491b-49d1-497a-ba65-3aa2920af38a";
+    fsType = "ext4";
+  };
+
   swapDevices = [
     { device = "/dev/disk/by-uuid/e7453b0e-fb24-47dd-8505-ac9b574b0973"; }
   ];

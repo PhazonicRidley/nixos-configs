@@ -40,7 +40,18 @@
     htop
   ];
 
+
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 0;
+
   networking = {
+    
+    vlans = {
+      gayming = { id = 30; interface = "enp39s0"; };
+    };
+
+    interfaces = {
+      "gayming".useDHCP = true;
+    };
 
     networkmanager = {
       enable = true;
@@ -68,11 +79,12 @@
       server = [
         "1.1.1.1"
         "8.8.8.8"
+        "192.168.20.2"
       ];
-      address = [ "/phazonicridley.com/192.168.128.128" ];
+      address = [ "/phazonicridley.com/192.168.20.2" ];
       listen-address = [
         "127.0.0.1"
-        "192.168.128.128"
+        "192.168.20.2"
       ];
       bind-interfaces = true;
     };
@@ -95,3 +107,4 @@
 
   system.stateVersion = "25.05";
 }
+
