@@ -57,6 +57,18 @@ in
 
       };
 
+      "retronas" = {
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:3923";
+        };
+      };
+
+      "retronas.lan" = {
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:3923";
+        };
+      };
+
       "${domains.com}" = {
         enableACME = true;
         forceSSL = true;

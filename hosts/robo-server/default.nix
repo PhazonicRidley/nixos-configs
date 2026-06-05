@@ -79,14 +79,20 @@
       server = [
         "1.1.1.1"
         "8.8.8.8"
-        "192.168.20.2"
       ];
-      address = [ "/phazonicridley.com/192.168.20.2" ];
+      address = [ 
+        "/phazonicridley.com/192.168.20.2" 
+        "/retronas/192.168.20.2"
+        "/retronas.lan/192.168.20.2"
+        "/att/192.168.1.254"
+      ];
       listen-address = [
         "127.0.0.1"
         "192.168.20.2"
       ];
-      bind-interfaces = true;
+#      bind-interfaces = true;
+       bind-dynamic = true;
+
     };
 
   };
