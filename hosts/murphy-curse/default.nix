@@ -40,9 +40,8 @@ in
       "docker"
       "dialout"
     ];
-    packages = with pkgs; [ 
-      nushell     
-      linuxKernel.packages.linux_5_10.xpadneo 
+    packages = with pkgs; [
+      nushell
     ];
     openssh.authorizedKeys.keys = [
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDlWOd2WgZqVrbSn+1aNJszcFLyLLDAoimjBhfjhI7IkLeztUw5Bq21lUCgX6NbSpwQpXcsu5BGVLdpUn5rctsheBG7sNnf8PUAsKC3eEosBq1Z/If/uFVKe+KIIHDbALYWtONS51DRM2nLQ/FuKcx0MTVB7Fwwtp82otRWfWD7CjDD9Eq1O+wvhWYDdlC66KK+6j2SJNDYh4D4CHm2PlAQjoRyFiPaylmXTPZV8M8LXcnir6s8wI/DH2EuDJu8a0UOYudUHnzfi+xhysSLoS21/ZP3aLc3yHFbSUTBtwRi27c6LyagO/24Q8RV6tB2PyMnklJC3qCkphmHJ39+CBDCIcgx6WjmV6NTVLuWWJ/qsf0NUW4chcRd1LaQoFgiFroaIRfgajCZqF4boshK9x8NsPoaIFg/f0YqyxEWZj7q6MEJ2O2Nyx92WHIeBWhahTQQPGM6/2P8CwAEcbtOKKEUX4E7+1Q4+3SZXT1zjbNA0zDf+ebhsiVSgXq83oFJauE= phazonic@Madelines-Laptop.local"
@@ -105,6 +104,8 @@ in
     motherboard = "amd";
     server.port = 6742;
   };
+
+  hardware.xpadneo.enable = true;
 
   # Firewall
   networking.firewall.allowedTCPPorts = [ 22 ];
