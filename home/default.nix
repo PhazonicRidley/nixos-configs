@@ -22,7 +22,10 @@
       code = "code --profile ${username}";
     };
 
-    packages = with pkgs; [ claude-code ];
+    packages = with pkgs; [ 
+        claude-code
+        python3
+    ];
 
   };
 

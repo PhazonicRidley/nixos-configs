@@ -58,6 +58,9 @@ in
     iputils
     dnsutils
     papirus-icon-theme
+    usbutils
+    fio
+    udisks
   ];
 
   # Dynamic NIXOS_CONFIG pointing to the flake
