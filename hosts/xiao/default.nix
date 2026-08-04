@@ -58,6 +58,7 @@
       "steam"
       "webex"
       "firefox"
+      "kicad"
     ];
   };
 

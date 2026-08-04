@@ -32,6 +32,7 @@
         with pkgs.vscode-extensions;
         [
           jnoortheen.nix-ide
+          ms-vscode-remote.remote-containers
           ms-python.python
           llvm-vs-code-extensions.vscode-clangd
           ms-vscode.cmake-tools
