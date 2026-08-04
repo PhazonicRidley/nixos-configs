@@ -82,7 +82,7 @@ in
 
       "${libhal_domain}" = withCloudflareConfigs {
         locations."/" = {
-          proxyPass = "http://localhost:6767";
+          proxyPass = "http://localhost:3000";
         };
 
       };
