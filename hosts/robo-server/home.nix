@@ -12,8 +12,8 @@
   # Server-specific development packages
   home.packages = with pkgs; [
     vim
-    python314
     uv
+    openssl
 
     # Compiler toolchain
     llvmPackages_20.libcxxClang

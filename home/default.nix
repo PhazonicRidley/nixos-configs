@@ -85,6 +85,8 @@
         vim.opt.shiftwidth = 2
         vim.opt.expandtab = true
       '';
+      withRuby = false;
+      withPython3 = false;
     };
 
     # Git

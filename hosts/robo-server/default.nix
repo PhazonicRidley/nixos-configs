@@ -11,6 +11,8 @@
     ./synapse.nix
     ./nginx.nix
     ./conan-server.nix
+    ./retronas.nix
+    ./ce.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/avahi.nix
   ];
@@ -67,6 +69,7 @@
       allowedTCPPorts = [
         53
         22
+        8080
       ];
       allowedUDPPorts = [ 53 ];
     };
@@ -85,6 +88,8 @@
         "/retronas/192.168.20.2"
         "/retronas.lan/192.168.20.2"
         "/att/192.168.1.254"
+        "/lan/192.168.20.2"
+        "/internal/192.168.20.2"
       ];
       listen-address = [
         "127.0.0.1"

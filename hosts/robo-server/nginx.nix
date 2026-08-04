@@ -6,7 +6,57 @@
 let
   matrix_domain = "matrix.${domains.com}";
   conan_domain = "conan.${domains.xyz}";
+  libhal_domain = "libhal.${domains.xyz}";
+  ce_domain = "ce.${domains.xyz}";
   jfrog_domain = "jfrog.${domains.xyz}";
+
+
+  withCloudflareConfigs = attr: {
+    forceSSL = true;
+    sslCertificate = "/var/lib/cloudflare-certs/cert.pem";
+    sslCertificateKey = "/var/lib/cloudflare-certs/key.pem";
+  } // attr;
+
+  intCert = {
+    sslCertificate = "/opt/lan-cert/wildcard-internal-lan.crt";
+    sslCertificateKey  = "/opt/lan-cert/wildcard-internal-lan.key";
+  };
+
+  withInternalCert = attr: {
+    enableACME = false;
+    forceSSL = false;
+    addSSL = true;
+    inherit (intCert) sslCertificate sslCertificateKey;
+
+  } // attr;
+
+
+  internalHosts = {
+      "phazonic.lan" = {};
+
+      "ca.phazonic.lan" = {
+        
+        root = "/var/www";
+        locations = {
+          "/" = { 
+            tryFiles = "/madeline-ca.crt =404"; 
+            extraConfig = ''
+            add_header Content-Disposition "attachment; filename=madeline-ca.crt";
+            '';
+          };
+
+          "/madeline-ca.crt" = { tryFiles = "$uri $uri/ =404"; };
+        };
+      };
+
+      "retronas.phazonic.lan" = {
+
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:3923";
+        };
+      };
+  };
+
 in
 {
 
@@ -18,15 +68,26 @@ in
     recommendedOptimisation = true;
     recommendedGzipSettings = true;
     clientMaxBodySize = "2G";
+
     virtualHosts = {
 
       "${jfrog_domain}".globalRedirect = conan_domain;
 
-      "${conan_domain}" = {
-        forceSSL = true;
-        #enableACME = true;
-        sslCertificate = "/var/lib/cloudflare-certs/cert.pem";
-        sslCertificateKey = "/var/lib/cloudflare-certs/key.pem";
+      "${ce_domain}" = withCloudflareConfigs {
+        locations."/" = {
+          proxyPass = "http://localhost:10242";
+        };
+      };
+
+
+      "${libhal_domain}" = withCloudflareConfigs {
+        locations."/" = {
+          proxyPass = "http://localhost:6767";
+        };
+
+      };
+
+      "${conan_domain}" = withCloudflareConfigs {
         locations."/ui/" = {
           alias = "/var/conan/data/";
           extraConfig = ''
@@ -57,15 +118,11 @@ in
 
       };
 
-      "retronas" = {
+      "retronas" = withInternalCert {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:3923";
-        };
-      };
-
-      "retronas.lan" = {
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:3923";
+          extraConfig = ''
+            return 301 $scheme://retronas.phazonic.lan$request_uri;
+          '';
         };
       };
 
@@ -108,9 +165,13 @@ in
           proxyPass = "http://127.0.0.1:8008";
         };
       };
-
-    };
+    } // (builtins.mapAttrs (name: cfg:
+    withInternalCert (cfg // {
+    serverAliases = [ "${name}.phazonic.internal" ];
+  })
+) internalHosts);
   };
+
 
   # ACME/Let's Encrypt configuration
   security.acme = {
