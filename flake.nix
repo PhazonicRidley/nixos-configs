@@ -34,7 +34,10 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
-    mac-app-util.url = "github:hraban/mac-app-util";
+    mac-app-util = {
+      url = "github:hraban/mac-app-util";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
