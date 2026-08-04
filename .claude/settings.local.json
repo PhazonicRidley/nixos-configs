@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat ~/.profile *)",
+      "Read(//nix/store/**)",
+      "Bash(nix flake *)",
+      "Bash(nix derivation *)",
+      "WebSearch"
+    ]
+  }
+}
