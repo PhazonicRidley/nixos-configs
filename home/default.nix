@@ -3,12 +3,23 @@
 # Can be used standalone: nix run home-manager -- switch --flake .#phazonic@linux
 {
   pkgs,
+  lib,
+  config,
   username ? "phazonic",
   ...
 }:
 
 {
-  home = {
+  # Extra packages for the shared python3 environment. Hosts append to this
+  # instead of adding their own separate python3(.withPackages), which would
+  # collide with this one (both would install e.g. bin/pydoc3.13).
+  options.python3Packages = lib.mkOption {
+    type = lib.types.functionTo (lib.types.listOf lib.types.package);
+    default = _ps: [ ];
+    description = "Extra python3 packages, as a `ps: [...]` function like python3.withPackages takes.";
+  };
+
+  config.home = {
     inherit username;
     homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
     stateVersion = "25.05";
@@ -22,14 +33,14 @@
       code = "code --profile ${username}";
     };
 
-    packages = with pkgs; [ 
-        claude-code
-        python3
+    packages = with pkgs; [
+      claude-code
+      (python3.withPackages config.python3Packages)
     ];
 
   };
 
-  programs = {
+  config.programs = {
     home-manager.enable = true;
 
     # Shell configuration

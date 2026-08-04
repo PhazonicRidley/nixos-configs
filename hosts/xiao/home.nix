@@ -19,16 +19,15 @@
     brew-clangd = "/opt/homebrew/opt/llvm@21/bin/clangd";
   };
 
+  # Extra packages for the shared python3 environment (see ../../home)
+  python3Packages = ps: with ps; [
+    pyserial
+    cmake
+    pip
+  ];
+
   # Xiao-specific packages
   home.packages = with pkgs; [
-    # Python with embedded dev packages
-    (python313.withPackages (
-      ps: with ps; [
-        pyserial
-        cmake
-        pip
-      ]
-    ))
     python313Packages.pyocd
     stm32loader
     conan
