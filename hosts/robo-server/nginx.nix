@@ -10,51 +10,57 @@ let
   ce_domain = "ce.${domains.xyz}";
   jfrog_domain = "jfrog.${domains.xyz}";
 
-
-  withCloudflareConfigs = attr: {
-    forceSSL = true;
-    sslCertificate = "/var/lib/cloudflare-certs/cert.pem";
-    sslCertificateKey = "/var/lib/cloudflare-certs/key.pem";
-  } // attr;
+  withCloudflareConfigs =
+    attr:
+    {
+      forceSSL = true;
+      sslCertificate = "/var/lib/cloudflare-certs/cert.pem";
+      sslCertificateKey = "/var/lib/cloudflare-certs/key.pem";
+    }
+    // attr;
 
   intCert = {
     sslCertificate = "/opt/lan-cert/wildcard-internal-lan.crt";
-    sslCertificateKey  = "/opt/lan-cert/wildcard-internal-lan.key";
+    sslCertificateKey = "/opt/lan-cert/wildcard-internal-lan.key";
   };
 
-  withInternalCert = attr: {
-    enableACME = false;
-    forceSSL = false;
-    addSSL = true;
-    inherit (intCert) sslCertificate sslCertificateKey;
+  withInternalCert =
+    attr:
+    {
+      enableACME = false;
+      forceSSL = false;
+      addSSL = true;
+      inherit (intCert) sslCertificate sslCertificateKey;
 
-  } // attr;
-
+    }
+    // attr;
 
   internalHosts = {
-      "phazonic.lan" = {};
+    "phazonic.lan" = { };
 
-      "ca.phazonic.lan" = {
-        
-        root = "/var/www";
-        locations = {
-          "/" = { 
-            tryFiles = "/madeline-ca.crt =404"; 
-            extraConfig = ''
+    "ca.phazonic.lan" = {
+
+      root = "/var/www";
+      locations = {
+        "/" = {
+          tryFiles = "/madeline-ca.crt =404";
+          extraConfig = ''
             add_header Content-Disposition "attachment; filename=madeline-ca.crt";
-            '';
-          };
+          '';
+        };
 
-          "/madeline-ca.crt" = { tryFiles = "$uri $uri/ =404"; };
+        "/madeline-ca.crt" = {
+          tryFiles = "$uri $uri/ =404";
         };
       };
+    };
 
-      "retronas.phazonic.lan" = {
+    "retronas.phazonic.lan" = {
 
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:3923";
-        };
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:3923";
       };
+    };
   };
 
 in
@@ -78,7 +84,6 @@ in
           proxyPass = "http://localhost:10242";
         };
       };
-
 
       "${libhal_domain}" = withCloudflareConfigs {
         locations."/" = {
@@ -165,13 +170,17 @@ in
           proxyPass = "http://127.0.0.1:8008";
         };
       };
-    } // (builtins.mapAttrs (name: cfg:
-    withInternalCert (cfg // {
-    serverAliases = [ "${name}.phazonic.internal" ];
-  })
-) internalHosts);
+    }
+    // (builtins.mapAttrs (
+      name: cfg:
+      withInternalCert (
+        cfg
+        // {
+          serverAliases = [ "${name}.phazonic.internal" ];
+        }
+      )
+    ) internalHosts);
   };
-
 
   # ACME/Let's Encrypt configuration
   security.acme = {
@@ -180,7 +189,7 @@ in
     defaults.server = "https://acme-v02.api.letsencrypt.org/directory";
   };
 
-  # Open firewall for HTTP
+  # Open firewall for HTTP(S)
   networking.firewall.allowedTCPPorts = [
     80
     443
