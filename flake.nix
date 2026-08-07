@@ -38,6 +38,11 @@
       url = "github:hraban/mac-app-util";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    vscode-server = {
+        url = "github:nix-community/nixos-vscode-server";
+        inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -45,6 +50,7 @@
       nixpkgs,
       home-manager,
       nix-darwin,
+      vscode-server,
       ...
     }@inputs:
     let
@@ -77,7 +83,10 @@
               xyz = "phazonicridley.xyz";
             };
           };
-          modules = [ ./hosts/robo-server ];
+          modules = [ 
+            ./hosts/robo-server
+            vscode-server.nixosModules.default
+          ];
         };
       };
 

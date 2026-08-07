@@ -118,5 +118,9 @@ in
     isGlobalPkgs = false;
   };
 
+  security.pki.certificateFiles = [
+    ./certs/madeline-ca.crt
+  ];
+
   system.stateVersion = "25.11";
 }

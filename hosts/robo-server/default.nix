@@ -107,6 +107,10 @@
     enable = true;
   };
 
+  services.vscode-server = {
+    enable = true;
+  };
+
   # Disable suspension and sleep (server should stay on)
   systemd.targets.sleep.enable = false;
   systemd.targets.suspend.enable = false;
