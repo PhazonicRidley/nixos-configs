@@ -10,6 +10,8 @@
 }:
 
 {
+  nixpkgs.config.allowUnfree = true;
+
   # Extra packages for the shared python3 environment. Hosts append to this
   # instead of adding their own separate python3(.withPackages), which would
   # collide with this one (both would install e.g. bin/pydoc3.13).

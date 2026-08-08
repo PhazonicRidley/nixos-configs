@@ -40,8 +40,8 @@
     };
 
     vscode-server = {
-        url = "github:nix-community/nixos-vscode-server";
-        inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/nixos-vscode-server";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -83,10 +83,16 @@
               xyz = "phazonicridley.xyz";
             };
           };
-          modules = [ 
+          modules = [
             ./hosts/robo-server
             vscode-server.nixosModules.default
           ];
+        };
+
+        MilesPrower = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [ ./hosts/milesprower ];
         };
       };
 

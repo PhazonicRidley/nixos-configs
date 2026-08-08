@@ -66,7 +66,10 @@
 
   # Home-manager integration
   home-manager = {
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = {
+      inherit inputs;
+      username = "phazonic";
+    };
     backupFileExtension = "backup";
   };
 }
