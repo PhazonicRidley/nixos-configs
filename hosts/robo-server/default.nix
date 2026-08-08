@@ -123,14 +123,6 @@
 
   services.tailscale = {
     enable = true;
-
-    useRoutingFeatures = "server";
-    authKeyFile = "/var/lib/secrets/tailscale-auth-key";
-    extraUpFlags = [
-      "--advertise-routes=192.168.0.0/16"
-      "--accept-routes"
-    ];
-
   };
 
   services.vscode-server = {
