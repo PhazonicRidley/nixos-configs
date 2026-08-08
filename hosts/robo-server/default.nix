@@ -2,17 +2,17 @@
 {
   inputs,
   pkgs,
+  wanIface,
+  gamingVlanInfo,
   ...
 }:
 
 {
   imports = [
     ./hardware-configuration.nix
-    ./synapse.nix
+    ./systemd.nix
     ./nginx.nix
-    ./conan-server.nix
-    ./retronas.nix
-    ./ce.nix
+    ./dns.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/avahi.nix
   ];
@@ -40,19 +40,34 @@
     docker-compose
     gcc14
     htop
+    nixd
+    nixfmt
   ];
 
+  boot.kernel.sysctl = {
+    "net.ipv4.conf.all.forwarding" = true;
+    "net.ipv6.conf.all.forwarding" = true;
 
-  boot.kernel.sysctl."net.ipv4.ip_forward" = 0;
+    # Enable loose mode for asymmetric networking, kernel won't drop packets on the return path coming from tailnet
+    "net.ipv4.conf.all.rp_filter" = 2;
+    "net.ipv4.conf.default.rp_filter" = 2;
+    
+    # Disable ipv6 routing between the two vlans
+    "net.ipv6.conf.${gamingVlanInfo.iface}.autoconf" = 0;
+    "net.ipv6.conf.${gamingVlanInfo.iface}.accept_ra" = 0;
+  };
 
   networking = {
-    
+
     vlans = {
-      gayming = { id = 30; interface = "enp39s0"; };
+      ${gamingVlanInfo.iface} = {
+        id = 30;
+        interface = wanIface;
+      };
     };
 
     interfaces = {
-      "gayming".useDHCP = true;
+      "${gamingVlanInfo.iface}".useDHCP = true;
     };
 
     networkmanager = {
@@ -66,45 +81,56 @@
 
     hostName = "RoboServer";
     firewall = {
-      allowedTCPPorts = [
-        53
-        22
-        8080
-      ];
-      allowedUDPPorts = [ 53 ];
+      allowedTCPPorts = [ ];
+      allowedUDPPorts = [ ];
+
+      interfaces = {
+        "${wanIface}" = {
+          allowedTCPPorts = [ 22 53 80 443 8080 ];
+          allowedUDPPorts = [ 53 ];
+        };
+        "${gamingVlanInfo.iface}".allowedTCPPorts = [
+          80
+          443
+        ];
+        "tailscale0".allowedTCPPorts = [
+          22
+          53
+          80
+          443
+          8080
+        ];
+      };
+
+      extraCommands = ''
+        iptables -A OUTPUT -d ${gamingVlanInfo.net} -m conntrack --ctstate NEW -j DROP
+
+        iptables -I FORWARD -i ${wanIface} -o ${gamingVlanInfo.iface} -j DROP
+        iptables -I FORWARD -i ${gamingVlanInfo.iface} -o ${wanIface} -j DROP
+
+        iptables -I DOCKER-USER -i ${wanIface} -o ${gamingVlanInfo.iface} -j DROP
+        iptables -I DOCKER-USER -i ${gamingVlanInfo.iface} -o ${wanIface} -j DROP
+
+
+         # IPv6 — interface-only match, no CIDR needed
+         ip6tables -I FORWARD -i ${wanIface} -o ${gamingVlanInfo.iface} -j DROP
+         ip6tables -I FORWARD -i ${gamingVlanInfo.iface} -o ${wanIface} -j DROP
+         ip6tables -I DOCKER-USER -i ${wanIface} -o ${gamingVlanInfo.iface} -j DROP
+         ip6tables -I DOCKER-USER -i ${gamingVlanInfo.iface} -o ${wanIface} -j DROP
+      '';
     };
   };
-
-  # DNS server
-  services.dnsmasq = {
-    enable = true;
-    settings = {
-      server = [
-        "1.1.1.1"
-        "8.8.8.8"
-      ];
-      address = [ 
-        "/phazonicridley.com/192.168.20.2" 
-        "/retronas/192.168.20.2"
-        "/retronas.lan/192.168.20.2"
-        "/att/192.168.1.254"
-        "/lan/192.168.20.2"
-        "/internal/192.168.20.2"
-      ];
-      listen-address = [
-        "127.0.0.1"
-        "192.168.20.2"
-      ];
-#      bind-interfaces = true;
-       bind-dynamic = true;
-
-    };
-
-  };
-
 
   services.tailscale = {
     enable = true;
+
+    useRoutingFeatures = "server";
+    authKeyFile = "/var/lib/secrets/tailscale-auth-key";
+    extraUpFlags = [
+      "--advertise-routes=192.168.0.0/16"
+      "--accept-routes"
+    ];
+
   };
 
   services.vscode-server = {
@@ -127,4 +153,3 @@
 
   system.stateVersion = "25.05";
 }
-

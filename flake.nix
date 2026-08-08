@@ -40,8 +40,8 @@
     };
 
     vscode-server = {
-        url = "github:nix-community/nixos-vscode-server";
-        inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/nixos-vscode-server";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -78,12 +78,17 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs;
+            wanIface = "enp39s0";
+            gamingVlanInfo = {
+              iface = "gayming";
+              net = "192.168.69.0/24";
+            };
             domains = {
               com = "phazonicridley.com";
               xyz = "phazonicridley.xyz";
             };
           };
-          modules = [ 
+          modules = [
             ./hosts/robo-server
             vscode-server.nixosModules.default
           ];
