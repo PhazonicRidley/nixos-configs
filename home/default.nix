@@ -10,8 +10,6 @@
 }:
 
 {
-  nixpkgs.config.allowUnfree = true;
-
   # Extra packages for the shared python3 environment. Hosts append to this
   # instead of adding their own separate python3(.withPackages), which would
   # collide with this one (both would install e.g. bin/pydoc3.13).
@@ -20,6 +18,8 @@
     default = _ps: [ ];
     description = "Extra python3 packages, as a `ps: [...]` function like python3.withPackages takes.";
   };
+
+  config.nixpkgs.config.allowUnfree = true;
 
   config.home = {
     inherit username;
