@@ -1,5 +1,6 @@
 {
   domains,
+  config,
   ...
 }:
 
@@ -132,7 +133,7 @@ in
       };
 
       "${domains.com}" = {
-        enableACME = true;
+        useACMEHost = domains.com;
         forceSSL = true;
         locations."= /.well-known/matrix/server".extraConfig =
           let
@@ -164,7 +165,7 @@ in
       };
 
       "${matrix_domain}" = {
-        enableACME = true;
+        useACMEHost = domains.com;
         forceSSL = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:8008";
@@ -187,11 +188,18 @@ in
     acceptTerms = true;
     defaults.email = "ma13hew@gmail.com";
     defaults.server = "https://acme-v02.api.letsencrypt.org/directory";
-  };
 
-  # Open firewall for HTTP(S)
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-  ];
+    certs."${domains.com}" = {
+      domain = domains.com;
+      extraDomainNames = [ "*.${domains.com}" ];
+      dnsProvider = "dreamhost";
+      environmentFile = "/var/lib/secrets/dreamhost-acme-env";
+      group = config.services.nginx.group;
+      reloadServices = [ "nginx" ];
+
+
+      dnsResolver = "1.1.1.1:53";
+    };
+  };
 }
+
