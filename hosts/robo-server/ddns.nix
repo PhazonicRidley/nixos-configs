@@ -9,7 +9,7 @@ in {
     description = "Update phazonicridley.com AAAA record on Dreamhost";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${update-script}/bin/dreamhost-ddns";
+      ExecStart = "${update-script}/bin/dreamhost-ddns matrix";
     };
   };
 

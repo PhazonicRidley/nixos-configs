@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+BASE_DOMAIN="phazonicridley.com"
+
 API_KEY=$(cat /var/lib/secrets/dreamhost-acme-env | awk -F'=' '{print $2}')
 
 CURRENT_IP=$(ip -6 addr show enp39s0 \
@@ -31,5 +33,7 @@ update_record() {
     "https://api.dreamhost.com/?key=${API_KEY}&cmd=dns-add_record&record=${domain}&type=AAAA&value=${CURRENT_IP}"
 }
 
-update_record "phazonicridley.com"
-update_record "*.phazonicridley.com"
+update_record "$BASE_DOMAIN"
+for subdomain in "$@"; do
+  update_record "${subdomain}.${BASE_DOMAIN}"
+done
