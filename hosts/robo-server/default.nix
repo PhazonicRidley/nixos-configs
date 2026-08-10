@@ -13,6 +13,7 @@
     ./systemd.nix
     ./nginx.nix
     ./dns.nix
+    ./ddns.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/avahi.nix
   ];
