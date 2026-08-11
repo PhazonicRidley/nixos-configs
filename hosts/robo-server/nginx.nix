@@ -171,6 +171,20 @@ in
           proxyPass = "http://127.0.0.1:8008";
         };
       };
+
+      "_" = {
+        listen = [
+          { addr = "0.0.0.0"; port = 80; }
+          { addr = "[::]"; port = 80; }
+          { addr = "0.0.0.0"; port = 443; ssl = true; }
+          { addr = "[::]"; port = 443; ssl = true; }
+        ];
+        extraConfig = "ssl_reject_handshake on;";
+        default = true;
+        locations."/" = {
+          return = 444;
+        };
+      };
     }
     // (builtins.mapAttrs (
       name: cfg:
@@ -197,9 +211,7 @@ in
       group = config.services.nginx.group;
       reloadServices = [ "nginx" ];
 
-
       dnsResolver = "1.1.1.1:53";
     };
   };
 }
-
