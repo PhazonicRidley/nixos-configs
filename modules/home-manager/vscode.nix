@@ -12,7 +12,7 @@
 
   programs.vscode = {
     enable = true;
-    profiles."phazonic" = {
+    profiles.default = {
       userSettings = {
         "nix.enableLanguageServer" = true;
         "workbench.colorTheme" = "Dark Modern";
@@ -42,6 +42,7 @@
           ms-vscode-remote.vscode-remote-extensionpack
           ms-vscode-remote.remote-ssh
           github.vscode-github-actions
+          hashicorp.terraform
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {

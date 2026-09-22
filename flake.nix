@@ -20,7 +20,7 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    # Darwin (Xiao)
+    # Darwin 
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -106,6 +106,14 @@
           user = "phazonic";
         };
         modules = [ ./hosts/xiao ];
+      };
+
+      darwinConfigurations.WorkComputah = nix-darwin.lib.darwinSystem {
+	specialArgs = {
+	  inherit inputs;
+	  user = "madeline.schneider";
+	};
+	modules = [ ./hosts/work-computah ];
       };
 
       # Standalone home-manager for arbitrary machines
