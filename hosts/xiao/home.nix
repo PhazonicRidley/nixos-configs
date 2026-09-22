@@ -37,7 +37,7 @@
   ];
 
   # Xiao-specific VSCode settings
-  programs.vscode.profiles."phazonic".userSettings = {
+  programs.vscode.profiles.default.userSettings = {
     "clangd.path" = "/opt/homebrew/opt/llvm@21/bin/clangd";
   };
 

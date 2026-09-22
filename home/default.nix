@@ -32,7 +32,6 @@
 
     shellAliases = {
       ll = "ls -l";
-      code = "code --profile ${username}";
     };
 
     packages = with pkgs; [
@@ -82,6 +81,7 @@
 
     direnv = {
       enable = true;
+      enableNushellIntegration = true; # you use nushell
       enableBashIntegration = true;
       enableZshIntegration = true;
     };

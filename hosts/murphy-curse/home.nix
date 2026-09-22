@@ -36,7 +36,7 @@ in
   programs.lutris.enable = true;
 
   # Machine-specific VSCode nixd options
-  programs.vscode.profiles."phazonic".userSettings."nix.serverSettings" = {
+  programs.vscode.profiles.default.userSettings."nix.serverSettings" = {
     nixd = {
       formatting.command = [ "nixfmt" ];
       options = {
