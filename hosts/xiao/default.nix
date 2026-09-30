@@ -71,13 +71,6 @@
         KeepAlive = false;
       };
     };
-    rectangle = {
-      command = "/Applications/Rectangle.app/Contents/MacOS/Rectangle";
-      serviceConfig = {
-        RunAtLoad = true;
-        KeepAlive = false;
-      };
-    };
   };
 
   # User
