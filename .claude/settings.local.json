@@ -5,7 +5,7 @@
       "Read(//nix/store/**)",
       "Bash(nix flake *)",
       "Bash(nix derivation *)",
-      "WebSearch",
+      "WebSearch"
     ]
   }
 }

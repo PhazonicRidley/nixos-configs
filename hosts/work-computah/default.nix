@@ -71,6 +71,7 @@
   # User
   users.users."madeline.schneider" = {
     home = "/Users/madeline.schneider";
+    description = "Madeline Schneider";
   };
 
   # Home-manager

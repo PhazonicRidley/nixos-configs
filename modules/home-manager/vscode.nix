@@ -43,6 +43,10 @@
           ms-vscode-remote.remote-ssh
           github.vscode-github-actions
           hashicorp.terraform
+          bazelbuild.vscode-bazel
+          gitlab.gitlab-workflow
+          redhat.vscode-yaml
+          grafana.grafana-alloy
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
