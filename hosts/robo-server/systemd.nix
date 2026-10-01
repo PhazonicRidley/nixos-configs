@@ -39,6 +39,11 @@
       };
     };
 
+    # TODO: Redo CE's infra. Only compilers are bind-mounted (camdrive/godbolt ->
+    # /opt/compiler-explorer); conan libraries (/root/.conan2, /opt/full_deploy) land
+    # in the container's writable layer (~29G and growing). Mount those too, and
+    # declare ce in virtualisation.oci-containers instead of `docker start`ing a
+    # hand-made container. ce_test (~68G) has the same problem.
     compiler-explorer = {
       description = "Compiler Explorer (ce) docker container";
       after = [ "docker.service" "network-online.target" ];
