@@ -103,6 +103,12 @@
           specialArgs = { inherit inputs; };
           modules = [ ./hosts/milesprower ];
         };
+
+        Aria = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [ ./hosts/milesprower ];
+        };
       };
 
       darwinConfigurations.Xiao = nix-darwin.lib.darwinSystem {
