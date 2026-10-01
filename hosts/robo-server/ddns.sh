@@ -2,7 +2,7 @@
 
 BASE_DOMAIN="phazonicridley.com"
 
-API_KEY=$(cat /var/lib/secrets/dreamhost-acme-env | awk -F'=' '{print $2}')
+API_KEY=$(awk -F'=' '{print $2}' /var/lib/secrets/dreamhost-acme-env)
 
 CURRENT_IP=$(ip -6 addr show enp39s0 \
   | grep 'inet6 2' \
@@ -16,11 +16,18 @@ if [ -z "$CURRENT_IP" ]; then
   exit 1
 fi
 
+DNS_RECORDS=$(curl -s \
+  "https://api.dreamhost.com/?key=${API_KEY}&cmd=dns-list_records&format=json")
+
+if ! echo "$DNS_RECORDS" | jq -e '.data' > /dev/null 2>&1; then
+  echo "Dreamhost API returned unexpected response: $DNS_RECORDS" >&2
+  exit 0
+fi
+
 update_record() {
   local domain="$1"
 
-  OLD_IP=$(curl -s \
-    "https://api.dreamhost.com/?key=${API_KEY}&cmd=dns-list_records&format=json" \
+  OLD_IP=$(echo "$DNS_RECORDS" \
     | jq -r --arg domain "$domain" \
       '.data[] | select(.type=="AAAA" and .record==$domain) | .value')
 

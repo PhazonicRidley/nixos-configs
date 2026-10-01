@@ -6,7 +6,6 @@
       "Bash(nix flake *)",
       "Bash(nix derivation *)",
       "WebSearch",
-      "WebFetch(*)"
     ]
   }
 }
