@@ -7,6 +7,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
+    ../../modules/nixos/avahi.nix
   ];
 
   # User configuration
@@ -60,7 +61,8 @@
     useRoutingFeatures = "server";
     authKeyFile = "/var/lib/secrets/tailscale-auth-key";
     extraUpFlags = [
-      "--advertise-routes=192.168.0.0/16,10.0.0.0/16" # Will be ansible variables
+      "--advertise-routes=192.168.0.0/16,10.0.0.0/8" # Will be ansible variables
+      "--snat-subnet-routes=false"
     ];
 
   };
