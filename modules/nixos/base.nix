@@ -40,6 +40,21 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # nixos-rebuild re-execs itself from the new nixpkgs, which calls
+  # `systemd-run --wait --verbose --output=cat` (systemd >= 261) using the
+  # *running* system's systemd-run. Fall back to the old flags when it's too old.
+  # TODO: Remove once upstream handles this or every host is on systemd >= 261.
+  nixpkgs.overlays = [
+    (final: prev: {
+      nixos-rebuild-ng = prev.nixos-rebuild-ng.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [ ./patches/nixos-rebuild-ng-old-systemd-run.patch ];
+        # Upstream tests assert the exact run_wrapper calls, which the probe changes
+        doCheck = false;
+        doInstallCheck = false;
+      });
+    })
+  ];
+
   # SSH
   services.openssh.enable = true;
 

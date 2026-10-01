@@ -54,7 +54,6 @@
       ];
     };
 
-    useDHCP = true;
     hostName = "Aria";
 
     firewall.allowedTCPPorts = [
