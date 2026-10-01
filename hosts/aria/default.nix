@@ -5,11 +5,14 @@
 }:
 {
   imports = [
+    ./disk-config.nix
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
     inputs.nixos-cli.nixosModules.nixos-cli
     inputs.optnix.nixosModules.optnix
+    inputs.disko.nixosModules.disko
   ];
+
   boot.loader.grub = {
     efiSupport = true;
     efiInstallAsRemovable = true;
