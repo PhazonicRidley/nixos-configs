@@ -50,7 +50,6 @@ in
   # Desktop packages
   home.packages = with pkgs; [
     kdePackages.kate
-    signal-desktop
     telegram-desktop
     chromium
     google-chrome

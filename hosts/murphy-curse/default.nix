@@ -57,9 +57,9 @@ in
   '';
 
   # NixOS CLI
-  services.nixos-cli = {
+  programs.nixos-cli = {
     enable = true;
-    config = { };
+    settings = { };
   };
 
   # optnix configuration
@@ -95,7 +95,19 @@ in
   ];
 
   # Flatpak
-  services.flatpak.enable = true;
+  services.flatpak = {
+    enable = true;
+    packages = [
+      "org.signal.Signal"
+      "com.github.tchx84.Flatseal"
+    ];
+
+    overrides = {
+      "org.signal.Signal".Environment = {
+        SIGNAL_PASSWORD_STORE = "gnome-libsecret";
+      };
+    };
+  };
 
   # RGB
   services.hardware.openrgb = {
@@ -108,7 +120,16 @@ in
   hardware.xpadneo.enable = true;
 
   # Firewall
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    8080
+    10809
+  ];
+  networking.firewall.allowedUDPPorts = [
+    67
+    69
+    4011
+  ];
 
   # Home-manager user config
   home-manager.users.phazonic = import ./home.nix;

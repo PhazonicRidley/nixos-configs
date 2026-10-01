@@ -4,6 +4,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,7 +22,7 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    # Darwin 
+    # Darwin
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -70,7 +72,10 @@
         MurphyCurse = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
-          modules = [ ./hosts/murphy-curse ];
+          modules = [
+            ./hosts/murphy-curse
+            inputs.nix-flatpak.nixosModules.nix-flatpak
+          ];
         };
 
         RoboServer = nixpkgs.lib.nixosSystem {
@@ -109,11 +114,11 @@
       };
 
       darwinConfigurations.WorkComputah = nix-darwin.lib.darwinSystem {
-	specialArgs = {
-	  inherit inputs;
-	  user = "madeline.schneider";
-	};
-	modules = [ ./hosts/work-computah ];
+        specialArgs = {
+          inherit inputs;
+          user = "madeline.schneider";
+        };
+        modules = [ ./hosts/work-computah ];
       };
 
       # Standalone home-manager for arbitrary machines
