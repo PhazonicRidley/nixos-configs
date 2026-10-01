@@ -69,8 +69,8 @@
 
   services.tailscale = {
     enable = true;
-    # authKeyFile = "/var/lib/secrets/tailscale-auth-key";
-
+    useRoutingFeatures = "client";
+    extraSetFlags = ["--accept-route"];
   };
 
   # Disable suspension and sleep (server should stay on)
