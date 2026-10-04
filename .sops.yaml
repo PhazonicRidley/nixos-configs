@@ -1,0 +1,8 @@
+keys:
+  - &roboserver age1s9v7354faxf5er3d0psz8wjf340k4cafuchdawy03rjum832pssqv4gf2h
+
+
+creation_rules:
+  - path_regex: secrets/roboserver\.yaml$
+    key_groups:
+      - age: [ *roboserver ]

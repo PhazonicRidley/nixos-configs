@@ -140,7 +140,7 @@ in
   };
 
   security.pki.certificateFiles = [
-    ./certs/madeline-ca.crt
+    ../../certs/madeline-ca.crt
   ];
 
   system.stateVersion = "25.11";

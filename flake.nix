@@ -5,6 +5,10 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     disko.url = "github:nix-community/disko";
 
@@ -54,6 +58,7 @@
       home-manager,
       nix-darwin,
       vscode-server,
+      sops-nix,
       ...
     }@inputs:
     let
@@ -97,36 +102,45 @@
           modules = [
             ./hosts/robo-server
             vscode-server.nixosModules.default
+            sops-nix.nixosModules.sops
           ];
         };
 
         MilesPrower = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
-          modules = [ ./hosts/milesprower ];
+          modules = [
+            ./hosts/milesprower
+            sops-nix.nixosModules.sops
+          ];
         };
 
         Aria = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
-          modules = [ ./hosts/aria ];
+          modules = [
+            ./hosts/aria
+            sops-nix.nixosModules.sops
+          ];
         };
       };
 
-      darwinConfigurations.Xiao = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          inherit inputs;
-          user = "phazonic";
+      darwinConfigurations = {
+        Xiao = nix-darwin.lib.darwinSystem {
+          specialArgs = {
+            inherit inputs;
+            user = "phazonic";
+          };
+          modules = [ ./hosts/xiao ];
         };
-        modules = [ ./hosts/xiao ];
-      };
 
-      darwinConfigurations.WorkComputah = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          inherit inputs;
-          user = "madeline.schneider";
+        WorkComputah = nix-darwin.lib.darwinSystem {
+          specialArgs = {
+            inherit inputs;
+            user = "madeline.schneider";
+          };
+          modules = [ ./hosts/work-computah ];
         };
-        modules = [ ./hosts/work-computah ];
       };
 
       # Standalone home-manager for arbitrary machines

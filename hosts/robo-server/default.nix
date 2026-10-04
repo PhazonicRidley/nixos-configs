@@ -16,6 +16,7 @@
     ./ddns.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/avahi.nix
+    ../../modules/common/secrets.nix
   ];
 
   # User configuration

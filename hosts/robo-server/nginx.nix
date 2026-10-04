@@ -15,14 +15,14 @@ let
     attr:
     {
       forceSSL = true;
-      sslCertificate = "/var/lib/cloudflare-certs/cert.pem";
-      sslCertificateKey = "/var/lib/cloudflare-certs/key.pem";
+      sslCertificate = ../../certs/cloudflare-cert.pem;
+      sslCertificateKey = config.sops.secrets."cloudflare/key".path;
     }
     // attr;
 
   intCert = {
-    sslCertificate = "/opt/lan-cert/wildcard-internal-lan.crt";
-    sslCertificateKey = "/opt/lan-cert/wildcard-internal-lan.key";
+    sslCertificate = ../../certs/wildcard-internal-lan.crt;
+    sslCertificateKey = config.sops.secrets."lan-cert/key".path;
   };
 
   withInternalCert =
@@ -221,7 +221,7 @@ in
       domain = domains.com;
       extraDomainNames = [ "*.${domains.com}" ];
       dnsProvider = "dreamhost";
-      environmentFile = "/var/lib/secrets/dreamhost-acme-env";
+      environmentFile = config.sops.secrets."dreamhost-acme-env".path;
       group = config.services.nginx.group;
       reloadServices = [ "nginx" ];
 
