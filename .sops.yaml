@@ -1,8 +1,13 @@
 keys:
   - &roboserver age1s9v7354faxf5er3d0psz8wjf340k4cafuchdawy03rjum832pssqv4gf2h
+  - &milesprower age1ewc0r99maxax2nc3ranac3r6x9h76waxywgm8smxsay25nqmzuas0jth68
 
 
 creation_rules:
-  - path_regex: secrets/roboserver\.yaml$
+  - path_regex: secrets/web\.yaml$
     key_groups:
       - age: [ *roboserver ]
+  
+  - path_regex: secrets/tailscale\.yaml$
+    key_groups:
+      - age: [ *milesprower ]

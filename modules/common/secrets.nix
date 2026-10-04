@@ -6,9 +6,23 @@
 }:
 
 let
+  mkSopsFilePath =
+    {
+      dir ? config.networking.hostName,
+    }:
+    ../../secrets/${lib.toLower dir}.yaml;
+
+  tailscale_secrets = rec {
+    sopsFile = mkSopsFilePath { dir = "tailscale"; };
+    secrets = {
+      "tailscale-auth/key" = {
+        inherit sopsFile;
+      };
+    };
+  };
+
   web_secrets = rec {
-    # TODO: Change to hosts/<hostname>/<hostname>.yaml, requires changing folder names
-    sopsFile = ../../secrets/${lib.toLower config.networking.hostName}.yaml;
+    sopsFile = mkSopsFilePath { dir = "web"; };
     nginxUser = config.services.nginx.user;
     restartUnits = [ "nginx.service" ];
 
@@ -37,5 +51,8 @@ in
   ];
 
   sops.age.keyFile = "/var/lib/sops-nix/keys.txt";
-  sops.secrets = web_secrets.secrets;
+  sops.secrets = lib.mkMerge [
+    (lib.mkIf config.services.nginx.enable web_secrets.secrets)
+    (lib.mkIf config.services.tailscale.enable tailscale_secrets.secrets)
+  ];
 }
