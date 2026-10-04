@@ -1,6 +1,7 @@
 keys:
   - &roboserver age1s9v7354faxf5er3d0psz8wjf340k4cafuchdawy03rjum832pssqv4gf2h
   - &milesprower age1ewc0r99maxax2nc3ranac3r6x9h76waxywgm8smxsay25nqmzuas0jth68
+  - &aria age1aawk95p5heh0u9pgsq8wpm9fpwy70vqe32d8jcs2nwuyy2fz7gpsh7vy6l
 
 
 creation_rules:
@@ -11,3 +12,7 @@ creation_rules:
   - path_regex: secrets/tailscale\.yaml$
     key_groups:
       - age: [ *milesprower, *roboserver ]
+  
+  - path_regex: secrets/forgejo\.yaml$
+    key_groups:
+      - age: [ *aria ]

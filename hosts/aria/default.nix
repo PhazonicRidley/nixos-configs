@@ -8,6 +8,7 @@
     ./disk-config.nix
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
+    ../../modules/common/secrets.nix
     inputs.nixos-cli.nixosModules.nixos-cli
     inputs.optnix.nixosModules.optnix
     inputs.disko.nixosModules.disko
@@ -20,9 +21,22 @@
   services.openssh = {
     enable = true;
     listenAddresses = [
-    { addr = "100.106.26.109"; port = 22; }
-    { addr = "127.0.0.1"; port = 22; } # Optional: local loopback
-  ];
+      {
+        addr = "100.106.26.109";
+        port = 2222;
+      }
+      {
+        addr = "127.0.0.1";
+        port = 2222;
+      }
+    ];
+
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+      AllowUsers = [ "phazonic" ];
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -65,25 +79,23 @@
 
     hostName = "Aria";
 
-    firewall.allowedTCPPorts = [
-      22
-      80
-      443
-    ];
+    firewall = {
+      allowedTCPPorts = [
+        22
+        80
+        443
+      ];
+
+      interfaces.tailscale0.allowedTCPPorts = [ 2222 ];
+    };
 
   };
 
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "client";
-    extraSetFlags = ["--accept-route"];
+    extraSetFlags = [ "--accept-route" ];
   };
-
-  # Disable suspension and sleep (server should stay on)
-  systemd.targets.sleep.enable = false;
-  systemd.targets.suspend.enable = false;
-  systemd.targets.hibernate.enable = false;
-  systemd.targets.hybrid-sleep.enable = false;
 
   system.stateVersion = "24.05";
 
