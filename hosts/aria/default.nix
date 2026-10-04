@@ -17,7 +17,13 @@
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    listenAddresses = [
+    { addr = "100.106.26.109"; port = 22; }
+    { addr = "127.0.0.1"; port = 22; } # Optional: local loopback
+  ];
+  };
 
   environment.systemPackages = with pkgs; [
     curl
