@@ -2,7 +2,7 @@
 
 BASE_DOMAIN="phazonicridley.com"
 
-API_KEY=$(awk -F'=' '{print $2}' /var/lib/secrets/dreamhost-acme-env)
+API_KEY="${DREAMHOST_API_KEY:?DREAMHOST_API_KEY not set}"
 
 CURRENT_IP=$(ip -6 addr show enp39s0 \
   | grep 'inet6 2' \
