@@ -9,6 +9,7 @@
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/avahi.nix
+    ../../modules/common/secrets.nix
   ];
 
   # User configuration
@@ -75,7 +76,7 @@
   systemd.targets.hybrid-sleep.enable = false;
 
   security.pki.certificateFiles = [
-    ../murphy-curse/certs/madeline-ca.crt
+    ../../certs/madeline-ca.crt
   ];
 
   system.stateVersion = "25.11";

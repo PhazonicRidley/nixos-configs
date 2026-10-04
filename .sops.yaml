@@ -10,4 +10,4 @@ creation_rules:
   
   - path_regex: secrets/tailscale\.yaml$
     key_groups:
-      - age: [ *milesprower ]
+      - age: [ *milesprower, *roboserver ]
