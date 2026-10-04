@@ -131,6 +131,10 @@ in
     4011
   ];
 
+  networking.hosts = {
+    "100.106.26.109" = [ "aria" ];
+  };
+
   # Home-manager user config
   home-manager.users.phazonic = import ./home.nix;
   home-manager.extraSpecialArgs = {
