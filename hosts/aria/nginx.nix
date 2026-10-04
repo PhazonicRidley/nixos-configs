@@ -6,7 +6,7 @@
 let
   matrix_domain = "matrix.${domains.com}";
   libhal_domain = "libhal.${domains.xyz}";
-  forgejo_domain = "git.${libhal_domain}";
+  forgejo_domain = "git-libhal.${domains.xyz}";
   jfrog_domain = "jfrog.${libhal_domain}";
   grafana_domain = "grafana.phazonic.lan";
 
