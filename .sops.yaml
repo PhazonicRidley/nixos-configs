@@ -11,7 +11,7 @@ creation_rules:
   
   - path_regex: secrets/tailscale\.yaml$
     key_groups:
-      - age: [ *milesprower, *roboserver ]
+      - age: [ *milesprower, *roboserver, *aria ]
   
   - path_regex: secrets/forgejo\.yaml$
     key_groups:

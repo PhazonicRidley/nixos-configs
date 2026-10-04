@@ -1,12 +1,11 @@
 {
   lib,
   pkgs,
-  domains,
   ...
 }:
 
 let
-  libhal_domain = "libhal.${domains.xyz}";
+  libhal_domain = "libhal.phazonicridley.xyz";
   forgejo_domain = "git.${libhal_domain}";
 in
 {

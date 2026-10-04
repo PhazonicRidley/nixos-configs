@@ -9,6 +9,7 @@
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
     ../../modules/common/secrets.nix
+    ./forgejo.nix
     inputs.nixos-cli.nixosModules.nixos-cli
     inputs.optnix.nixosModules.optnix
     inputs.disko.nixosModules.disko
