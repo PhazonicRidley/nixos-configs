@@ -7,7 +7,7 @@ keys:
 creation_rules:
   - path_regex: secrets/web\.yaml$
     key_groups:
-      - age: [ *roboserver ]
+      - age: [ *roboserver, *aria ]
   
   - path_regex: secrets/tailscale\.yaml$
     key_groups:

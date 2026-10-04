@@ -10,6 +10,7 @@
     ../../modules/nixos/base.nix
     ../../modules/common/secrets.nix
     ./forgejo.nix
+    ./nginx.nix
     inputs.nixos-cli.nixosModules.nixos-cli
     inputs.optnix.nixosModules.optnix
     inputs.disko.nixosModules.disko

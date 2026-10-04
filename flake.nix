@@ -117,7 +117,13 @@
 
         Aria = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { 
+            inherit inputs; 
+            domains = {
+              com = "phazonicridley.com";
+              xyz = "phazonicridley.xyz";
+            };
+          };
           modules = [
             ./hosts/aria
             sops-nix.nixosModules.sops
