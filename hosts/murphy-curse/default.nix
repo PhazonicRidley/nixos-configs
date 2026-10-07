@@ -17,6 +17,7 @@ in
     ../../modules/nixos/desktop-plasma.nix
     ../../modules/nixos/gaming.nix
     ../../modules/nixos/avahi.nix
+    ./microvm-test.nix
     inputs.nixos-cli.nixosModules.nixos-cli
     inputs.optnix.nixosModules.optnix
   ];
