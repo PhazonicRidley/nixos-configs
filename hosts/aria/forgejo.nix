@@ -5,7 +5,7 @@
   ...
 }:
 let
-  libhal_domain = "libhal.${domains.xyz}";
+  # libhal_domain = "libhal.${domains.xyz}";
   forgejo_domain = "git-libhal.${domains.xyz}";
 in
 {

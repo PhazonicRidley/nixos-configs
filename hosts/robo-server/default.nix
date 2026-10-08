@@ -53,7 +53,7 @@
     # Enable loose mode for asymmetric networking, kernel won't drop packets on the return path coming from tailnet
     "net.ipv4.conf.all.rp_filter" = 2;
     "net.ipv4.conf.default.rp_filter" = 2;
-    
+
     # Disable ipv6 routing between the two vlans
     "net.ipv6.conf.${gamingVlanInfo.iface}.autoconf" = 0;
     "net.ipv6.conf.${gamingVlanInfo.iface}.accept_ra" = 0;
@@ -88,7 +88,13 @@
 
       interfaces = {
         "${wanIface}" = {
-          allowedTCPPorts = [ 22 53 80 443 8080 ];
+          allowedTCPPorts = [
+            22
+            53
+            80
+            443
+            8080
+          ];
           allowedUDPPorts = [ 53 ];
         };
         "${gamingVlanInfo.iface}".allowedTCPPorts = [

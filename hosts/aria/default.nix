@@ -11,6 +11,7 @@
     ../../modules/common/secrets.nix
     ./forgejo.nix
     ./nginx.nix
+    ./synapse.nix
     inputs.nixos-cli.nixosModules.nixos-cli
     inputs.optnix.nixosModules.optnix
     inputs.disko.nixosModules.disko

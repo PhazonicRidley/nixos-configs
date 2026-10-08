@@ -5,7 +5,12 @@
       "Read(//nix/store/**)",
       "Bash(nix flake *)",
       "Bash(nix derivation *)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:element-hq.github.io)",
+      "Read(//run/**)",
+      "Bash(systemctl cat *)",
+      "WebFetch(domain:wiki.nixos.org)"
     ]
   }
 }

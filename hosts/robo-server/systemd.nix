@@ -1,16 +1,6 @@
-{ pkgs, domains, ... }:
+{ pkgs, ... }:
 
 {
-  services.matrix-synapse = {
-    enable = true;
-    settings = {
-      server_name = domains.com;
-      enable_registration = false;
-      database.name = "sqlite3";
-    };
-
-    extraConfigFiles = [ "/etc/matrix-synapse/secrets.yaml" ];
-  };
 
   virtualisation.oci-containers = {
     backend = "docker";
@@ -26,7 +16,10 @@
   systemd.services = {
     retronas = {
       description = "RetroNAS docker-compose stack";
-      after = [ "docker.service" "network-online.target" ];
+      after = [
+        "docker.service"
+        "network-online.target"
+      ];
       requires = [ "docker.service" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
@@ -46,7 +39,10 @@
     # hand-made container. ce_test (~68G) has the same problem.
     compiler-explorer = {
       description = "Compiler Explorer (ce) docker container";
-      after = [ "docker.service" "network-online.target" ];
+      after = [
+        "docker.service"
+        "network-online.target"
+      ];
       requires = [ "docker.service" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
