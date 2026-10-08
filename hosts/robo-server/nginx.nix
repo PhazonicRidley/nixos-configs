@@ -5,7 +5,6 @@
 }:
 
 let
-  matrix_domain = "matrix.${domains.com}";
   conan_domain = "conan.${domains.xyz}";
   libhal_domain = "libhal.${domains.xyz}";
   ce_domain = "ce.${domains.xyz}";
@@ -132,45 +131,11 @@ in
         };
       };
 
-      "${domains.com}" = {
-        useACMEHost = domains.com;
-        forceSSL = true;
-        locations."= /.well-known/matrix/server".extraConfig =
-          let
-            body = {
-              "m.server" = "${matrix_domain}:443";
-            };
-          in
-          ''
-            add_header Content-Type application/json;
-            return 200 '${builtins.toJSON body}';
-          '';
-
-        locations."= /.well-known/matrix/client".extraConfig =
-          let
-            body = {
-              "m.homeserver" = {
-                "base_url" = "https://${matrix_domain}";
-              };
-              "m.identity_server" = {
-                "base_url" = "https://vector.im";
-              };
-            };
-          in
-          ''
-              				add_header Content-Type application/json;
-              				add_header Access-Control-Allow-Origin *;
-              				return 200 '${builtins.toJSON body}';
-            			   '';
-      };
-
-      "${matrix_domain}" = {
-        useACMEHost = domains.com;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:8008";
-        };
-      };
+      # "${domains.com}" = {
+      #   useACMEHost = domains.com;
+      #   forceSSL = true;
+      #   locations."/" = { };
+      # };
 
       "_" = {
         listen = [
@@ -212,20 +177,20 @@ in
   };
 
   # ACME/Let's Encrypt configuration
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "ma13hew@gmail.com";
-    defaults.server = "https://acme-v02.api.letsencrypt.org/directory";
+  # security.acme = {
+  #   acceptTerms = true;
+  #   defaults.email = "ma13hew@gmail.com";
+  #   defaults.server = "https://acme-v02.api.letsencrypt.org/directory";
 
-    certs."${domains.com}" = {
-      domain = domains.com;
-      extraDomainNames = [ "*.${domains.com}" ];
-      dnsProvider = "dreamhost";
-      environmentFile = config.sops.secrets."dreamhost-acme-env".path;
-      group = config.services.nginx.group;
-      reloadServices = [ "nginx" ];
+  #   certs."${domains.com}" = {
+  #     domain = domains.com;
+  #     extraDomainNames = [ "*.${domains.com}" ];
+  #     dnsProvider = "dreamhost";
+  #     environmentFile = config.sops.secrets."dreamhost-acme-env".path;
+  #     group = config.services.nginx.group;
+  #     reloadServices = [ "nginx" ];
 
-      dnsResolver = "1.1.1.1:53";
-    };
-  };
+  #     dnsResolver = "1.1.1.1:53";
+  #   };
+  # };
 }
