@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  config,
   domains,
   ...
 }:
@@ -15,6 +16,12 @@ in
     database.type = "postgres";
 
     settings = {
+
+      DEFAULT = {
+        APP_NAME = "Libhal Mirror";
+        APP_SLOGAN = "Libhal backup git server and runner";
+      };
+
       server = {
         DOMAIN = forgejo_domain;
         ROOT_URL = "https://${forgejo_domain}";
@@ -33,6 +40,7 @@ in
   };
 
   services.postgresql.package = pkgs.postgresql_17;
+  environment.systemPackages = [ config.services.forgejo.package ];
 
   systemd.services.forgejo.serviceConfig = {
     AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
