@@ -24,8 +24,16 @@
           "--query-driver=**/g++,**/*-g++"
           "--clang-tidy"
         ];
-        "claudeCode.model" = "sonnet";
         "claudeCode.preferredLocation" = "panel";
+        "[python]" = {
+          "editor.defaultFormatter" = "ms-python.black-formatter";
+        };
+        "[rust]" = {
+          "editor.defaultFormatter" = "rust-lang.rust-analyzer";
+        };
+        "[toml]" = {
+          "editor.defaultFormatter" = "tamasfe.even-better-toml";
+        };
       };
 
       extensions =
@@ -34,6 +42,10 @@
           jnoortheen.nix-ide
           ms-vscode-remote.remote-containers
           ms-python.python
+          ms-python.vscode-pylance
+          ms-python.flake8
+          ms-python.black-formatter
+          ms-python.isort
           llvm-vs-code-extensions.vscode-clangd
           ms-vscode.cmake-tools
           vadimcn.vscode-lldb
@@ -43,6 +55,10 @@
           ms-vscode-remote.remote-ssh
           github.vscode-github-actions
           hashicorp.terraform
+          rust-lang.rust-analyzer
+          tamasfe.even-better-toml
+          fill-labs.dependi
+          bazelbuild.vscode-bazel
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
