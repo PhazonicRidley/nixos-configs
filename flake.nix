@@ -50,6 +50,11 @@
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
     };
+
+    ci-runners = {
+      url = "git+file:///home/phazonic/Documents/libhal-runners";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -82,6 +87,7 @@
           modules = [
             ./hosts/murphy-curse
             inputs.nix-flatpak.nixosModules.nix-flatpak
+            inputs.ci-runners.nixosModules.default
           ];
         };
 
