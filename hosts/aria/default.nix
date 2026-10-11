@@ -97,7 +97,7 @@
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "client";
-    extraSetFlags = [ "--accept-route" ];
+    extraSetFlags = [ "--accept-routes" ];
   };
 
   system.stateVersion = "24.05";
