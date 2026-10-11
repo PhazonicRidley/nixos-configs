@@ -11,7 +11,7 @@
         "8.8.8.8"
       ];
       address = [
-        "/phazonicridley.com/192.168.20.2"
+        "/int.phazonicridley.com/192.168.20.2"
         "/retronas/192.168.20.2"
         "/retronas.lan/192.168.20.2"
         "/att/192.168.1.254"
