@@ -62,6 +62,11 @@
       ...
     }@inputs:
     let
+      domains = {
+        com = "phazonicridley.com";
+        xyz = "phazonicridley.xyz";
+      };
+
       # Helper for standalone home-manager
       mkHome =
         {
@@ -94,10 +99,7 @@
               iface = "gayming";
               net = "192.168.69.0/24";
             };
-            domains = {
-              com = "phazonicridley.com";
-              xyz = "phazonicridley.xyz";
-            };
+            inherit domains;
           };
           modules = [
             ./hosts/robo-server
@@ -117,12 +119,8 @@
 
         Aria = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { 
-            inherit inputs; 
-            domains = {
-              com = "phazonicridley.com";
-              xyz = "phazonicridley.xyz";
-            };
+          specialArgs = {
+            inherit inputs domains;
           };
           modules = [
             ./hosts/aria
