@@ -77,6 +77,15 @@ in
 
     virtualHosts = {
 
+      "a.int.${domains.com}" = { 
+        useACMEHost = "int.${domains.com}";
+        forceSSL = true;
+      };
+      "int.${domains.com}" = {
+        useACMEHost = "int.${domains.com}";
+        forceSSL = true;
+      };
+
       "${jfrog_domain}".globalRedirect = conan_domain;
 
       "${ce_domain}" = withCloudflareConfigs {
@@ -177,20 +186,31 @@ in
   };
 
   # ACME/Let's Encrypt configuration
-  # security.acme = {
-  #   acceptTerms = true;
-  #   defaults.email = "ma13hew@gmail.com";
-  #   defaults.server = "https://acme-v02.api.letsencrypt.org/directory";
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "ma13hew@gmail.com";
+    defaults.server = "https://acme-v02.api.letsencrypt.org/directory";
 
-  #   certs."${domains.com}" = {
-  #     domain = domains.com;
-  #     extraDomainNames = [ "*.${domains.com}" ];
-  #     dnsProvider = "dreamhost";
-  #     environmentFile = config.sops.secrets."dreamhost-acme-env".path;
-  #     group = config.services.nginx.group;
-  #     reloadServices = [ "nginx" ];
+    certs."int.${domains.com}" = {
+      domain = "int.${domains.com}";
+      extraDomainNames = [ "int.${domains.com}" "*.int.${domains.com}" ];
+      dnsProvider = "dreamhost";
+      environmentFile = config.sops.secrets."dreamhost-acme-env".path;
+      group = config.services.nginx.group;
+      reloadServices = [ "nginx" ];
 
-  #     dnsResolver = "1.1.1.1:53";
-  #   };
-  # };
+      dnsResolver = "1.1.1.1:53";
+    };
+
+    # certs."${domains.com}" = {
+    #   domain = domains.com;
+    #   extraDomainNames = [ "*.${domains.com}" ];
+    #   dnsProvider = "dreamhost";
+    #   environmentFile = config.sops.secrets."dreamhost-acme-env".path;
+    #   group = config.services.nginx.group;
+    #   reloadServices = [ "nginx" ];
+    #
+    #   dnsResolver = "1.1.1.1:53";
+    # };
+  };
 }
