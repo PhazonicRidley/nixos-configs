@@ -59,6 +59,8 @@
           tamasfe.even-better-toml
           fill-labs.dependi
           bazelbuild.vscode-bazel
+          grafana.grafana-alloy
+          eamodio.gitlens
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
@@ -66,12 +68,6 @@
             publisher = "ms-vscode-remote";
             version = "0.47.2";
             sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
-          }
-          {
-            name = "gitlens";
-            publisher = "eamodio";
-            version = "2026.1.704";
-            sha256 = "sha256-fxFHRW9ooewKyBlmfOWlhVfq7mSLq3uEe1npST85+dE=";
           }
           {
             name = "discord-vscode";
