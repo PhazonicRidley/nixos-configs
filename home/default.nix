@@ -5,6 +5,7 @@
   pkgs,
   lib,
   config,
+  osConfig ? { },
   username ? "phazonic",
   ...
 }:
@@ -19,7 +20,11 @@
     description = "Extra python3 packages, as a `ps: [...]` function like python3.withPackages takes.";
   };
 
-  config.nixpkgs.config.allowUnfree = true;
+  # home-manager rejects `nixpkgs.*` when the host sets useGlobalPkgs (the
+  # Darwin hosts); those hosts enable allowUnfree at the system level.
+  config.nixpkgs.config = lib.mkIf (!(osConfig.home-manager.useGlobalPkgs or false)) {
+    allowUnfree = true;
+  };
 
   config.home = {
     inherit username;

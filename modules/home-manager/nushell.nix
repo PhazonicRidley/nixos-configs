@@ -5,6 +5,7 @@
 {
   programs.nushell = {
     enable = true;
+    loadSessionVariables = true;
     # plugins = [ pkgs.nushellPlugins.net ];  # Currently broken in nixpkgs
     shellAliases = {
       ll = "ls -l";
