@@ -11,6 +11,7 @@ in
   imports = [
     ../../home
     ../../modules/home-manager/nushell.nix
+    ../../modules/home-manager/kitty.nix
     ../../modules/home-manager/plasma.nix
     ../../modules/home-manager/vscode.nix
     ../../modules/home-manager/obsidian.nix

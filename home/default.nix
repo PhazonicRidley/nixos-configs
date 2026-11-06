@@ -50,19 +50,14 @@
   config.programs = {
     home-manager.enable = true;
 
-    # Shell configuration
+    # Shell configuration. The plugins list looks for name.plugin.zsh at the
+    # package root and silently skips the nixpkgs layouts, so tab completion,
+    # history suggestions, and highlighting never started.
     zsh = {
       enable = true;
-      plugins = [
-        {
-          name = "zsh-autosuggestions";
-          src = pkgs.zsh-autosuggestions;
-        }
-        {
-          name = "fast-syntax-highlighting";
-          src = pkgs.zsh-fast-syntax-highlighting;
-        }
-      ];
+      enableCompletion = true;
+      autosuggestion.enable = true;
+      fastSyntaxHighlighting.enable = true;
     };
 
     bash.enable = true;

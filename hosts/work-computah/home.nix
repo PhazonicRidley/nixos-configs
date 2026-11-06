@@ -8,6 +8,7 @@
   imports = [
     ../../home
     ../../modules/home-manager/nushell.nix
+    ../../modules/home-manager/kitty.nix
     ../../modules/home-manager/vscode.nix
     ../../modules/home-manager/obsidian.nix
   ];
@@ -26,16 +27,6 @@
   # Xiao-specific packages
   home.packages = with pkgs; [
   ];
-
-  # Only exec into nu for /bin/sh login shells; the $0 guard means this
-  # is a no-op when bash itself sources .profile (e.g. nix-shell, nix develop).
-  programs.bash.profileExtra = ''
-    case "$0" in
-      sh|-sh|*/sh)
-        [ -t 0 ] && exec nu
-        ;;
-    esac
-  '';
 
   # Enable fontconfig for user fonts
   fonts.fontconfig.enable = true;

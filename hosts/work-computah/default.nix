@@ -68,9 +68,11 @@
     };
   };
 
-  # User
+  # User. programs.zsh.enable puts this zsh on PATH and in /etc/shells.
+  programs.zsh.enable = true;
   users.users."madeline.schneider" = {
     home = "/Users/madeline.schneider";
+    shell = pkgs.zsh;
   };
 
   # Home-manager

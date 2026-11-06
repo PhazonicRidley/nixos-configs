@@ -29,11 +29,11 @@ in
   boot.kernelParams = [ "usbcore.autosuspend=-1" ];
 
   # User configuration
-  users.defaultUserShell = pkgs.nushell;
+  users.defaultUserShell = pkgs.zsh;
   users.users.phazonic = {
     isNormalUser = true;
     description = "Madeline Schneider";
-    shell = pkgs.nushell;
+    shell = pkgs.zsh;
     extraGroups = [
       "networkmanager"
       "wheel"

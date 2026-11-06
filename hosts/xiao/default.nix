@@ -73,9 +73,11 @@
     };
   };
 
-  # User
+  # User. programs.zsh.enable puts this zsh on PATH and in /etc/shells.
+  programs.zsh.enable = true;
   users.users.phazonic = {
     home = "/Users/phazonic";
+    shell = pkgs.zsh;
   };
 
   # Home-manager
