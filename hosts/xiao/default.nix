@@ -80,6 +80,27 @@
     shell = pkgs.zsh;
   };
 
+  nix.linux-builder = {
+    enable = true;
+    config.virtualisation = {
+      cores = 6;
+      darwin-builder = {
+        memorySize = 8192;
+        diskSize = 40960;
+      };
+    };
+  };
+
+  # Prebuilt RPi kernels/firmware for JamesPi (and the installer images).
+  # Set here rather than via flake nixConfig: we're not a trusted user, so
+  # the daemon ignores substituters passed from the flake or command line.
+  nix.settings = {
+    extra-substituters = [ "https://nixos-raspberrypi.cachix.org" ];
+    extra-trusted-public-keys = [
+      "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+    ];
+  };
+
   # Home-manager
   home-manager = {
     useGlobalPkgs = true;

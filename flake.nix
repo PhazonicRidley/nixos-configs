@@ -12,6 +12,10 @@
 
     disko.url = "github:nix-community/disko";
 
+    nixos-raspberrypi = {
+      url = "github:nvmd/nixos-raspberrypi/main";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -59,6 +63,7 @@
       nix-darwin,
       vscode-server,
       sops-nix,
+      nixos-raspberrypi,
       ...
     }@inputs:
     let
@@ -127,6 +132,30 @@
             sops-nix.nixosModules.sops
           ];
         };
+
+        # The system and home-manager use our unstable nixpkgs. The kernel and
+        # firmware still come from nixos-raspberrypi's own pinned nixpkgs
+        # (not followed on purpose) so they hit its binary cache instead of
+        # rebuilding the kernel on every nixpkgs bump. See hosts/jamespi.
+        JamesPi = nixos-raspberrypi.lib.nixosSystem {
+          inherit nixpkgs;
+          specialArgs = {
+            inherit inputs domains;
+          };
+          modules = [
+            {
+              # RPi 3 only exposes `base`. Bluetooth reuses the board-agnostic
+              # module (same file the rpi4/rpi5/rpi02 entries point at).
+              # No usb-gadget-ethernet: the 3B+ micro-USB port is power-only.
+              imports = with nixos-raspberrypi.nixosModules; [
+                raspberry-pi-3.base
+                raspberry-pi-4.bluetooth
+              ];
+            }
+            ./hosts/jamespi
+          ];
+        };
+
       };
 
       darwinConfigurations = {

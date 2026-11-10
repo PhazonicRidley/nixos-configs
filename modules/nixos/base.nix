@@ -41,6 +41,11 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Let phazonic copy unsigned (locally built) store paths in, e.g. for
+  # `nixos-rebuild --target-host phazonic@host --sudo` from another machine.
+  # Merged with the NixOS default, so root stays trusted.
+  nix.settings.trusted-users = [ "phazonic" ];
+
   # SSH
   services.openssh.enable = true;
 

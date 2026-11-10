@@ -82,7 +82,7 @@
 
     direnv = {
       enable = true;
-      enableNushellIntegration = true; # you use nushell
+      enableNushellIntegration = true;
       enableBashIntegration = true;
       enableZshIntegration = true;
     };
