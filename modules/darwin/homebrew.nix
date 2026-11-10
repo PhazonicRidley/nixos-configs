@@ -2,6 +2,7 @@
 {
   inputs,
   user,
+
   ...
 }:
 
@@ -9,12 +10,7 @@
 
   imports = [ inputs.nix-homebrew.darwinModules.nix-homebrew ];
 
-  config.homebrew.taps = [
-    "homebrew/cask"
-    "homebrew/core"
-  ];
-
-  config.nix-homebrew = {
+  nix-homebrew = {
     enable = true;
     enableRosetta = false;
     user = user;
@@ -24,5 +20,15 @@
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
     };
     mutableTaps = true;
+  };
+
+  homebrew = {
+    enable = true;
+    onActivation.cleanup = "zap";
+
+    taps = [
+      "homebrew/cask"
+      "homebrew/core"
+    ];
   };
 }

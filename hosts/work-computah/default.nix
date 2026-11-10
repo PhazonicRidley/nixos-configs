@@ -1,39 +1,24 @@
-# Xiao - MacBook Pro (Darwin aarch64)
+# WorkComputah - Work computer configuration I have for macbook pro
 {
   inputs,
   pkgs,
   ...
 }:
-
+let
+  primaryUser = "madeline.schneider";
+in
 {
   imports = [
-    ../../modules/common/nix-settings.nix
-    ../../modules/darwin/homebrew.nix
+    ../../modules/darwin/base.nix
     inputs.home-manager.darwinModules.home-manager
   ];
 
-  # Platform
-  nixpkgs.hostPlatform = "aarch64-darwin";
-  nixpkgs.config.allowUnfree = true;
-
-  # System
-  networking.hostName = "WorkComputah";
-  system.primaryUser = "madeline.schneider";
-  system.stateVersion = 6;
-
-  # Fonts
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-  ];
-
-  # Homebrew packages (non-Nix managed apps)
-  homebrew = {
+  darwinBase = {
     enable = true;
-    onActivation.cleanup = "zap";
+    inherit primaryUser;
+    hostPlatform = "aarch64-darwin";
 
-    brews = [
-      "usbutils"
-      "iproute2mac"
+    additionalBrews = [
       "colima"
       "docker"
       "docker-compose"
@@ -41,32 +26,16 @@
       "lima-additional-guestagents"
     ];
 
-    casks = [
-      "scroll-reverser"
-      "rectangle"
+    additionalCasks = [
       "saleae-logic"
       "obsidian"
       "utm"
     ];
+
   };
 
-  # Launch agents (start at login)
-  launchd.user.agents = {
-    scroll-reverser = {
-      command = "/Applications/Scroll Reverser.app/Contents/MacOS/Scroll Reverser";
-      serviceConfig = {
-        RunAtLoad = true;
-        KeepAlive = false;
-      };
-    };
-    rectangle = {
-      command = "/Applications/Rectangle.app/Contents/MacOS/Rectangle";
-      serviceConfig = {
-        RunAtLoad = true;
-        KeepAlive = false;
-      };
-    };
-  };
+  # Hostname
+  networking.hostName = "WorkComputah";
 
   # User. programs.zsh.enable puts this zsh on PATH and in /etc/shells.
   programs.zsh.enable = true;
@@ -79,10 +48,10 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users."madeline.schneider" = import ./home.nix;
+    users."${primaryUser}" = import ./home.nix;
     extraSpecialArgs = {
       inherit inputs;
-      username = "madeline.schneider";
+      username = primaryUser;
     };
     sharedModules = [
       inputs.mac-app-util.homeManagerModules.default
@@ -102,6 +71,7 @@
     trusted-users = [
       "root"
       "@admin"
+      "madeline.schneider"
     ];
   };
 }

@@ -7,47 +7,28 @@
 
 {
   imports = [
-    ../../modules/common/nix-settings.nix
-    ../../modules/darwin/homebrew.nix
+    ../../modules/darwin/base.nix
     inputs.home-manager.darwinModules.home-manager
   ];
 
-  # Platform
-  nixpkgs.hostPlatform = "aarch64-darwin";
-  nixpkgs.config.allowUnfree = true;
-
-  # System
-  networking.hostName = "Xiao";
-  system.primaryUser = "phazonic";
-  system.stateVersion = 6;
-
-  # Fonts
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-  ];
-
-  # Homebrew packages (non-Nix managed apps)
-  homebrew = {
+  darwinBase = {
     enable = true;
-    onActivation.cleanup = "zap";
+    primaryUser = "phazonic";
+    hostPlatform = "aarch64-darwin";
 
-    brews = [
+    additionalBrews = [
       "rustup"
-      "usbutils"
       "arm-none-eabi-gdb"
       "llvm@21"
       "clang-format"
-      "iproute2mac"
+      "qemu"
+      "lima-additional-guestagents"
       "colima"
       "docker"
       "docker-compose"
-      "qemu"
-      "lima-additional-guestagents"
     ];
 
-    casks = [
-      "scroll-reverser"
-      "rectangle"
+    additionalCasks = [
       "saleae-logic"
       "signal"
       "obsidian"
@@ -62,16 +43,10 @@
     ];
   };
 
-  # Launch agents (start at login)
-  launchd.user.agents = {
-    scroll-reverser = {
-      command = "/Applications/Scroll Reverser.app/Contents/MacOS/Scroll Reverser";
-      serviceConfig = {
-        RunAtLoad = true;
-        KeepAlive = false;
-      };
-    };
-  };
+  # Networking
+  networking.hostName = "Xiao";
+
+  # Homebrew packages (non-Nix managed apps)
 
   # User. programs.zsh.enable puts this zsh on PATH and in /etc/shells.
   programs.zsh.enable = true;

@@ -18,15 +18,12 @@
   };
 
   # Extra packages for the shared python3 environment (see ../../home)
-  python3Packages = ps: with ps; [
-    pyserial
-    cmake
-    pip
-  ];
-
-  # Xiao-specific packages
-  home.packages = with pkgs; [
-  ];
+  python3Packages =
+    ps: with ps; [
+      pyserial
+      cmake
+      pip
+    ];
 
   # Enable fontconfig for user fonts
   fonts.fontconfig.enable = true;
