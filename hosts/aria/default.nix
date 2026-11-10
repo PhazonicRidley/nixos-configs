@@ -1,6 +1,8 @@
 {
   inputs,
   pkgs,
+  lib,
+  config,
   ...
 }:
 {
@@ -18,9 +20,14 @@
   ];
 
   boot.loader.grub = {
+    enable = true;
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
+
+  boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
+
   services.openssh = {
     enable = true;
     listenAddresses = [
@@ -96,6 +103,7 @@
 
   services.tailscale = {
     enable = true;
+    authKeyFile = config.sops.secrets."tailscale-auth/key".path;
     useRoutingFeatures = "client";
     extraSetFlags = [ "--accept-routes" ];
   };
