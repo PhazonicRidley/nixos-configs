@@ -17,3 +17,7 @@ creation_rules:
   - path_regex: secrets/forgejo\.yaml$
     key_groups:
       - age: [ *aria ]
+  
+  - path_regex: secrets/aria\.yaml$
+    key_groups:
+      - age: [ *aria ]
