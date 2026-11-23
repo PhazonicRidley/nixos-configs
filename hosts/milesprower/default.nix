@@ -63,8 +63,8 @@
     useRoutingFeatures = "server";
     authKeyFile = config.sops.secrets."tailscale-auth/key".path; # "/var/lib/secrets/tailscale-auth-key";
     extraUpFlags = [
-      "--advertise-routes=192.168.0.0/16,10.0.0.0/8" # Will be ansible variables
-      "--snat-subnet-routes=false"
+      "--advertise-routes=192.168.0.0/16,fdbe:a276:cdec::/48" # Will be ansible variables
+      "--snat-subnet-routes=true"
     ];
 
   };
