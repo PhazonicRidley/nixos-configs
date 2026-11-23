@@ -21,3 +21,7 @@ creation_rules:
   - path_regex: secrets/aria\.yaml$
     key_groups:
       - age: [ *aria ]
+  
+  - path_regex: secrets/roboserver\.yaml$
+    key_groups:
+      - age: [ *roboserver ]

@@ -78,10 +78,35 @@ in
     virtualHosts = {
 
       "sh" = withInternalCert {
-          locations."/" = { };
+        locations."= /" = {
+          proxyPass = "http://127.0.0.1:8080";
+          recommendedProxySettings = true;
+          extraConfig = ''
+            if ($http_accept ~* "text/html") {
+              return 301 https://shlink.int.${domains.com};
+            }
+          '';
         };
 
-      "a.int.${domains.com}" = { 
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8080";
+          recommendedProxySettings = true;
+        };
+
+        locations."/rest/".proxyPass = "http://127.0.0.1:8080"; # Shlink API, same origin
+      };
+
+      "shlink.int.${domains.com}" = {
+        useACMEHost = "int.${domains.com}";
+        forceSSL = true;
+
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8081";
+        };
+
+      };
+
+      "a.int.${domains.com}" = {
         useACMEHost = "int.${domains.com}";
         forceSSL = true;
       };
@@ -197,7 +222,10 @@ in
 
     certs."int.${domains.com}" = {
       domain = "int.${domains.com}";
-      extraDomainNames = [ "int.${domains.com}" "*.int.${domains.com}" ];
+      extraDomainNames = [
+        "int.${domains.com}"
+        "*.int.${domains.com}"
+      ];
       dnsProvider = "dreamhost";
       environmentFile = config.sops.secrets."dreamhost-acme-env".path;
       group = config.services.nginx.group;

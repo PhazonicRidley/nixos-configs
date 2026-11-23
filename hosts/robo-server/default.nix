@@ -13,6 +13,7 @@
     ./systemd.nix
     ./nginx.nix
     ./dns.nix
+    ./shlinks.nix
     # ./ddns.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/avahi.nix
@@ -82,17 +83,17 @@
 
       ensureProfiles.profiles.lan = {
         connection = {
-        id = "lan";
-        type = "ethernet";
-        autoconnect = true;
-        autoconnect-priority = 100;
-      };
+          id = "lan";
+          type = "ethernet";
+          autoconnect = true;
+          autoconnect-priority = 100;
+        };
         match.interface-name = "en*";
         ipv4.method = "auto";
         ipv6 = {
           method = "auto";
           address1 = "fdbe:a276:cdec:20::2/64";
-          ip6-privacy = 0;   # no temporary addresses
+          ip6-privacy = 0; # no temporary addresses
           addr-gen-mode = "stable-privacy";
         };
       };
