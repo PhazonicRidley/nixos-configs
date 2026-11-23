@@ -77,6 +77,10 @@ in
 
     virtualHosts = {
 
+      "sh" = withInternalCert {
+          locations."/" = { };
+        };
+
       "a.int.${domains.com}" = { 
         useACMEHost = "int.${domains.com}";
         forceSSL = true;

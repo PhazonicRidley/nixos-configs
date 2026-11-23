@@ -79,6 +79,23 @@
         "1.1.1.1"
         "8.8.8.8"
       ];
+
+      ensureProfiles.profiles.lan = {
+        connection = {
+        id = "lan";
+        type = "ethernet";
+        autoconnect = true;
+        autoconnect-priority = 100;
+      };
+        match.interface-name = "en*";
+        ipv4.method = "auto";
+        ipv6 = {
+          method = "auto";
+          address1 = "fdbe:a276:cdec:20::2/64";
+          ip6-privacy = 0;   # no temporary addresses
+          addr-gen-mode = "stable-privacy";
+        };
+      };
     };
 
     hostName = "RoboServer";
