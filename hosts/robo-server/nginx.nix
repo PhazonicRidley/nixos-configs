@@ -92,8 +92,6 @@ in
           proxyPass = "http://127.0.0.1:8080";
           recommendedProxySettings = true;
         };
-
-        locations."/rest/".proxyPass = "http://127.0.0.1:8080"; # Shlink API, same origin
       };
 
       "shlink.int.${domains.com}" = {
@@ -101,9 +99,10 @@ in
         forceSSL = true;
 
         locations."/" = {
-          proxyPass = "http://127.0.0.1:8081";
+          proxyPass = "http://127.0.0.1:8081"; # Web UI
         };
 
+        locations."/rest/".proxyPass = "http://127.0.0.1:8080"; # Shlink API, same origin as the UI
       };
 
       "a.int.${domains.com}" = {
