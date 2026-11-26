@@ -65,7 +65,8 @@ let
         owner = nginxUser;
       };
 
-      "dreamhost-acme-env" = {
+      # DreamHost v1 API key (Bearer token, DNS scope). Read via DREAMHOST_API_KEY_FILE.
+      "dreamhost/dns_key" = {
         inherit sopsFile;
       };
     };

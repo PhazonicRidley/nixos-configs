@@ -1,10 +1,14 @@
-#!/usr/bin/env bash
+# Keep AAAA records for phazonicridley.com (and any subdomains given as args)
+# pointed at this host's stable global IPv6 address, via DreamHost's v1 API.
+#
+# (The DreamHost API client from modules/nixos/dreamhost/api.sh is prepended at
+# build time and provides dh_list/dh_send/dh_expect; it reads the key from
+# $DREAMHOST_API_KEY_FILE.)
 
-BASE_DOMAIN="phazonicridley.com"
+ZONE="phazonicridley.com"
+IFACE="enp39s0"
 
-API_KEY="${DREAMHOST_API_KEY:?DREAMHOST_API_KEY not set}"
-
-CURRENT_IP=$(ip -6 addr show enp39s0 \
+CURRENT_IP=$(ip -6 addr show "$IFACE" \
   | grep 'inet6 2' \
   | grep -v 'temporary' \
   | awk '{print $2}' \
@@ -12,35 +16,37 @@ CURRENT_IP=$(ip -6 addr show enp39s0 \
   | head -1 || true)
 
 if [ -z "$CURRENT_IP" ]; then
-  echo "No stable GUA found on enp39s0" >&2
+  echo "No stable GUA found on ${IFACE}" >&2
   exit 1
 fi
 
-DNS_RECORDS=$(curl -s \
-  "https://api.dreamhost.com/?key=${API_KEY}&cmd=dns-list_records&format=json")
-
-if ! echo "$DNS_RECORDS" | jq -e '.data' > /dev/null 2>&1; then
-  echo "Dreamhost API returned unexpected response: $DNS_RECORDS" >&2
-  exit 0
-fi
-
+# update_record NAME -- NAME is relative to $ZONE ("@" for the apex)
 update_record() {
-  local domain="$1"
+  local name="$1" old_ip body
 
-  OLD_IP=$(echo "$DNS_RECORDS" \
-    | jq -r --arg domain "$domain" \
-      '.data[] | select(.type=="AAAA" and .record==$domain) | .value')
+  dh_list "$ZONE" "$name" "AAAA"
+  dh_expect 200
+  old_ip=$(jq -r '.data[0].value // empty' "$DH_BODY_FILE")
 
-  [ "$CURRENT_IP" = "$OLD_IP" ] && return 0
+  if [ "$old_ip" = "$CURRENT_IP" ]; then
+    return 0
+  fi
 
-  [ -n "$OLD_IP" ] && curl -s \
-    "https://api.dreamhost.com/?key=${API_KEY}&cmd=dns-remove_record&record=${domain}&type=AAAA&value=${OLD_IP}"
-
-  curl -s \
-    "https://api.dreamhost.com/?key=${API_KEY}&cmd=dns-add_record&record=${domain}&type=AAAA&value=${CURRENT_IP}"
+  if [ -n "$old_ip" ]; then
+    body=$(jq -cn --arg name "$name" --arg old "$old_ip" --arg new "$CURRENT_IP" \
+      '{currentRecord: {name: $name, type: "AAAA", value: $old},
+        newRecord: {name: $name, type: "AAAA", fields: {ip: $new}}}')
+    dh_send PUT "$ZONE" "$body"
+  else
+    body=$(jq -cn --arg name "$name" --arg new "$CURRENT_IP" \
+      '{records: [{name: $name, type: "AAAA", fields: {ip: $new}}]}')
+    dh_send POST "$ZONE" "$body"
+  fi
+  dh_expect 200 201 202
+  echo "AAAA ${name}.${ZONE}: ${old_ip:-<none>} -> ${CURRENT_IP} (HTTP ${DH_STATUS})"
 }
 
-update_record "$BASE_DOMAIN"
+update_record "@"
 for subdomain in "$@"; do
-  update_record "${subdomain}.${BASE_DOMAIN}"
+  update_record "$subdomain"
 done

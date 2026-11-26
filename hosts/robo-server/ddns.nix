@@ -10,7 +10,8 @@ let
       gawk
       coreutils
     ];
-    text = builtins.readFile ./ddns.sh;
+    # DreamHost v1 API client (modules/nixos/dreamhost/api.sh) + the DDNS logic
+    text = config.dreamhostAcme.apiLib + "\n" + builtins.readFile ./ddns.sh;
   };
 in
 {
@@ -18,7 +19,7 @@ in
     description = "Update phazonicridley.com AAAA record on Dreamhost";
     serviceConfig = {
       Type = "oneshot";
-      Environment = "DREAMHOST_ENV_FILE=${config.sops.secrets."dreamhost-acme-env".path}";
+      Environment = "DREAMHOST_API_KEY_FILE=${config.sops.secrets."dreamhost/dns_key".path}";
       ExecStart = "${update-script}/bin/dreamhost-ddns matrix";
     };
   };

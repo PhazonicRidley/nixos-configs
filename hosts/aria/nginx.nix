@@ -38,6 +38,11 @@ let
 
 in
 {
+  imports = [ ../../modules/nixos/dreamhost ];
+
+  # DNS-01 for these certs goes through DreamHost's v1 API (see modules/nixos/dreamhost)
+  dreamhostAcme.certs = [ domains.com ];
+
   services.nginx = {
     enable = true;
 
@@ -143,8 +148,6 @@ in
     certs."${domains.com}" = {
       domain = domains.com;
       extraDomainNames = [ "*.${domains.com}" ];
-      dnsProvider = "dreamhost";
-      environmentFile = config.sops.secrets."dreamhost-acme-env".path;
       group = config.services.nginx.group;
       reloadServices = [ "nginx" ];
 
