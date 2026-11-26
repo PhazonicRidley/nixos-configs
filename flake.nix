@@ -115,7 +115,7 @@
 
         MilesPrower = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs domains; };
           modules = [
             ./hosts/milesprower
             sops-nix.nixosModules.sops

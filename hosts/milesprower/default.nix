@@ -7,6 +7,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./nginx.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/avahi.nix
     ../../modules/common/secrets.nix
