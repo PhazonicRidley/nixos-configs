@@ -37,10 +37,11 @@ in
         ++ [
           "/att/192.168.1.254"
           "/voron2.${intDomain}/192.168.128.190"
+          "/ha.${intDomain}/192.168.128.205"
         ];
 
       # att has no IPv6 address, so answer its AAAA queries locally (empty answer) instead of forwarding upstream
-      local = [ "/att/" ];
+      local = [ "/att/" "/voron2.${intDomain}/" "/ha.${intDomain}/"];
 
       listen-address = [
         "127.0.0.1"
