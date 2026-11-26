@@ -44,6 +44,7 @@ let
     "127.0.0.1"
     "::1"
     "192.168.0.0/16" # LAN + VLANs; Tailscale subnet-router traffic arrives SNATed from MilesPrower
+    "10.177.0.0/16" # Parents' site over Meraki Auto VPN (not seen by Tailscale; restrict via Meraki site-to-site firewall)
     "100.64.0.0/10" # Tailscale v4
     "fd7a:115c:a1e0::/48" # Tailscale v6
     "fdbe:a276:cdec::/48" # LAN ULA
