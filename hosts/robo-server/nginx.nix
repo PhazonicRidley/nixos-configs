@@ -60,6 +60,11 @@ let
       extraConfig = internalOnlyConfig + (attr.extraConfig or "");
     };
 
+  # copyparty (RetroNAS file server), served as both retronas.phazonic.lan and retronas.int.<domain>
+  copypartyLocation = {
+    proxyPass = "http://127.0.0.1:3923";
+  };
+
   internalHosts = {
     "phazonic.lan" = { };
 
@@ -81,10 +86,7 @@ let
     };
 
     "retronas.phazonic.lan" = {
-
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:3923";
-      };
+      locations."/" = copypartyLocation;
     };
   };
 
@@ -132,6 +134,13 @@ in
         };
 
         locations."/rest/".proxyPass = "http://127.0.0.1:8080"; # Shlink API, same origin as the UI
+      };
+
+      # Same copyparty backend as retronas.phazonic.lan, but with the publicly trusted *.int cert
+      "retronas.int.${domains.com}" = withInternalOnly {
+        useACMEHost = "int.${domains.com}";
+        forceSSL = true;
+        locations."/" = copypartyLocation;
       };
 
       "a.int.${domains.com}" = withInternalOnly {
