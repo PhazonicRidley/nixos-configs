@@ -1,6 +1,7 @@
 {
   domains,
   config,
+  lib,
   ...
 }:
 
@@ -34,6 +35,30 @@ let
 
     }
     // attr;
+
+  # RoboServer's 443 is reachable from the internet (WAN port-forward), and nginx serves
+  # whatever vhost the client names, regardless of DNS. Internal vhosts must therefore
+  # check the *source address* themselves. Port-forwarded traffic keeps the real client IP,
+  # and there is no real_ip config, so $remote_addr can't be spoofed via headers.
+  internalSources = [
+    "127.0.0.1"
+    "::1"
+    "192.168.0.0/16" # LAN + VLANs; Tailscale subnet-router traffic arrives SNATed from MilesPrower
+    "100.64.0.0/10" # Tailscale v4
+    "fd7a:115c:a1e0::/48" # Tailscale v6
+    "fdbe:a276:cdec::/48" # LAN ULA
+    "2600:1700:65a3:700::/60" # AT&T-delegated GUA prefix (MilesPrower sources from it); update if AT&T changes it
+  ];
+
+  internalOnlyConfig = lib.concatMapStrings (src: "allow ${src};\n") internalSources + "deny all;\n";
+
+  # Restrict a vhost to internal sources (anything else gets 403)
+  withInternalOnly =
+    attr:
+    attr
+    // {
+      extraConfig = internalOnlyConfig + (attr.extraConfig or "");
+    };
 
   internalHosts = {
     "phazonic.lan" = { };
@@ -81,7 +106,7 @@ in
 
     virtualHosts = {
 
-      "sh" = withInternalCert {
+      "sh" = withInternalCert (withInternalOnly {
         locations."= /" = {
           proxyPass = "http://127.0.0.1:8080";
           recommendedProxySettings = true;
@@ -96,9 +121,9 @@ in
           proxyPass = "http://127.0.0.1:8080";
           recommendedProxySettings = true;
         };
-      };
+      });
 
-      "shlink.int.${domains.com}" = {
+      "shlink.int.${domains.com}" = withInternalOnly {
         useACMEHost = "int.${domains.com}";
         forceSSL = true;
 
@@ -109,11 +134,11 @@ in
         locations."/rest/".proxyPass = "http://127.0.0.1:8080"; # Shlink API, same origin as the UI
       };
 
-      "a.int.${domains.com}" = {
+      "a.int.${domains.com}" = withInternalOnly {
         useACMEHost = "int.${domains.com}";
         forceSSL = true;
       };
-      "int.${domains.com}" = {
+      "int.${domains.com}" = withInternalOnly {
         useACMEHost = "int.${domains.com}";
         forceSSL = true;
       };
@@ -164,13 +189,13 @@ in
 
       };
 
-      "retronas" = withInternalCert {
+      "retronas" = withInternalCert (withInternalOnly {
         locations."/" = {
           extraConfig = ''
             return 301 $scheme://retronas.phazonic.lan$request_uri;
           '';
         };
-      };
+      });
 
       # "${domains.com}" = {
       #   useACMEHost = domains.com;
@@ -209,10 +234,12 @@ in
     // (builtins.mapAttrs (
       name: cfg:
       withInternalCert (
-        cfg
-        // {
-          serverAliases = [ "${name}.phazonic.internal" ];
-        }
+        withInternalOnly (
+          cfg
+          // {
+            serverAliases = [ "${name}.phazonic.internal" ];
+          }
+        )
       )
     ) internalHosts);
   };
